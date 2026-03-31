@@ -1,0 +1,238 @@
+/* ============================================================
+   css/professors.css  —  Professor cards, top3, top10
+   ============================================================ */
+
+/* ── Search / Filter row ────────────────────────────────── */
+.prof-header-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-bottom: 20px;
+}
+
+.filter-row { display: flex; gap: 8px; flex-wrap: wrap; }
+
+.inp-sm {
+  padding: 10px 14px;
+  background: rgba(255,255,255,0.055);
+  border: 1px solid rgba(255,255,255,0.09);
+  border-radius: 10px;
+  color: #dde1f0;
+  font-size: 13px;
+  font-family: 'Syne', sans-serif;
+  outline: none;
+  transition: border-color 0.2s;
+}
+.inp-sm:focus { border-color: rgba(192,132,252,0.4); }
+.inp-sm::placeholder { color: #3a3a5a; }
+option { background: #0c0c1a; }
+
+/* ── Dividers ──────────────────────────────────────────── */
+.divider       { height: 1px; background: rgba(255,255,255,0.06); }
+.divider-gold  { flex: 1; height: 1px; background: linear-gradient(to right, rgba(251,191,36,0.4), transparent); margin-left: 14px; }
+.top3-header   { display: flex; align-items: center; margin-bottom: 6px; }
+
+/* ── Top 3 Cards ────────────────────────────────────────── */
+.top3-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 18px;
+  margin-bottom: 22px;
+}
+
+.top3-card {
+  background: linear-gradient(135deg, rgba(255,255,255,0.04), rgba(255,255,255,0.02));
+  border-radius: 20px;
+  overflow: hidden;
+  cursor: pointer;
+  transition: transform 0.25s, box-shadow 0.25s;
+  position: relative;
+}
+.top3-card:hover { transform: translateY(-6px); }
+
+.top3-rank-badge {
+  position: absolute;
+  top: 12px; left: 12px;
+  font-size: 22px;
+  z-index: 2;
+  filter: drop-shadow(0 2px 6px rgba(0,0,0,0.5));
+}
+
+.top3-num-badge {
+  position: absolute;
+  top: 12px; right: 12px;
+  z-index: 2;
+  border-radius: 20px;
+  padding: 2px 10px;
+  font-size: 11px;
+  font-weight: 800;
+}
+
+.top3-img-wrap {
+  width: 100%;
+  height: 200px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  overflow: hidden;
+}
+.top3-img-wrap img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: top;
+}
+.top3-img-wrap .img-overlay {
+  position: absolute;
+  bottom: 0; left: 0; right: 0;
+  height: 80px;
+  background: linear-gradient(to top, #0c0c18, transparent);
+}
+.top3-img-initials {
+  font-size: 72px;
+  font-weight: 900;
+  opacity: 0.8;
+}
+
+.top3-rating-pill {
+  position: absolute;
+  bottom: 8px; right: 8px;
+  background: rgba(0,0,0,0.75);
+  border-radius: 20px;
+  padding: 3px 10px;
+  font-size: 13px;
+  color: #FBBF24;
+  font-weight: 800;
+  border: 1px solid rgba(251,191,36,0.3);
+}
+
+.top3-info { padding: 16px 18px 20px; }
+.top3-dept-row { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 8px; }
+.top3-name { font-weight: 800; font-size: 15px; line-height: 1.3; margin-bottom: 4px; }
+.top3-sub  { color: #555; font-size: 11px; margin-bottom: 12px; }
+.top3-stars-row { display: flex; align-items: center; gap: 8px; margin-bottom: 10px; }
+.top3-score { color: #FBBF24; font-weight: 800; font-size: 16px; }
+.top3-cnt   { color: #3a3a50; font-size: 10px; }
+.top3-interests {
+  font-size: 11px;
+  color: #fff;
+  line-height: 1.5;
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+}
+
+/* ── All Professors Grid ────────────────────────────────── */
+.prof-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(270px, 1fr));
+  gap: 16px;
+}
+
+.prof-card {
+  background: rgba(255,255,255,0.03);
+  border: 1px solid rgba(255,255,255,0.07);
+  border-radius: 18px;
+  overflow: hidden;
+  cursor: pointer;
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+.prof-card:hover { transform: translateY(-3px); box-shadow: 0 12px 40px rgba(0,0,0,0.4); }
+
+.prof-card-img {
+  width: 100%;
+  height: 160px;
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.prof-card-img img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: top;
+  transition: transform 0.4s;
+}
+.prof-card:hover .prof-card-img img { transform: scale(1.05); }
+.prof-card-img .img-fade {
+  position: absolute;
+  bottom: 0; left: 0; right: 0;
+  height: 50px;
+  background: linear-gradient(to top, rgba(12,12,26,0.9), transparent);
+}
+.prof-card-img .rating-pill {
+  position: absolute;
+  bottom: 8px; right: 8px;
+  background: rgba(0,0,0,0.75);
+  border-radius: 20px;
+  padding: 3px 10px;
+  font-size: 12px;
+  color: #FBBF24;
+  font-weight: 800;
+  border: 1px solid rgba(251,191,36,0.3);
+}
+.prof-card-initials {
+  font-size: 52px;
+  font-weight: 900;
+  opacity: 0.7;
+}
+
+.prof-card-body { padding: 14px 16px 16px; }
+.prof-card-badges { display: flex; gap: 6px; align-items: center; flex-wrap: wrap; margin-bottom: 10px; }
+.prof-card-name { font-weight: 800; font-size: 14px; line-height: 1.3; margin-bottom: 3px; }
+.prof-card-sub  { color: #555; font-size: 11px; line-height: 1.4; margin-bottom: 10px; }
+
+.prof-card-stars { display: flex; align-items: center; gap: 6px; margin-bottom: 10px; }
+.prof-star { font-size: 13px; color: #2a2a3a; }
+.prof-star.on { color: #FBBF24; filter: drop-shadow(0 0 3px rgba(251,191,36,0.4)); }
+
+.prof-card-social { display: flex; gap: 6px; align-items: center; flex-wrap: wrap; margin-bottom: 10px; }
+.social-icon {
+  font-size: 14px;
+  background: rgba(255,255,255,0.06);
+  padding: 4px 7px;
+  border-radius: 6px;
+  text-decoration: none;
+  transition: background 0.2s;
+}
+.social-icon:hover { background: rgba(255,255,255,0.12); }
+.prof-email { font-size: 10px; color: #3a3a50; }
+
+.prof-card-interests {
+  font-size: 11px;
+  color: #fff;
+  line-height: 1.5;
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  margin-bottom: 12px;
+}
+
+.prof-card-btns { display: flex; gap: 8px; }
+
+/* ── Dept colour helpers ─────────────────────────────────── */
+.dept-CSE { background: rgba(96,165,250,0.18);  color: #60a5fa; border: 1px solid rgba(96,165,250,0.3); }
+.dept-ECE { background: rgba(52,211,153,0.18);  color: #34d399; border: 1px solid rgba(52,211,153,0.3); }
+.dept-HBS { background: rgba(249,115,22,0.18);  color: #f97316; border: 1px solid rgba(249,115,22,0.3); }
+
+.badge-gold    { background: rgba(251,191,36,0.18); color: #FBBF24; border: 1px solid rgba(251,191,36,0.3); }
+.badge-silver  { background: rgba(192,192,192,0.18); color: #C0C0C0; border: 1px solid rgba(192,192,192,0.3); }
+.badge-bronze  { background: rgba(205,127,50,0.18); color: #CD7F32; border: 1px solid rgba(205,127,50,0.3); }
+.badge-top     { background: rgba(251,191,36,0.18); color: #FBBF24; border: 1px solid rgba(251,191,36,0.3); }
+
+/* Small badge utility */
+.chip {
+  display: inline-block;
+  padding: 3px 10px;
+  border-radius: 20px;
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 0.04em;
+}

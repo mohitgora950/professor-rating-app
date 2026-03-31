@@ -1,0 +1,405 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>EduRate — Dashboard</title>
+  <link rel="stylesheet" href="../css/dashboard.css" />
+  <link rel="stylesheet" href="../css/professors.css" />
+  <link rel="stylesheet" href="../css/modals.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&display=swap" rel="stylesheet"/>
+
+  <script>
+  /* ── Sidebar (defined in <head> so onclick attrs work immediately) ── */
+  function openSidebar() {
+    document.getElementById("sidebar").classList.add("open");
+    document.getElementById("sidebarOverlay").classList.add("open");
+    document.body.style.overflow = "hidden";
+  }
+  function closeSidebar() {
+    document.getElementById("sidebar").classList.remove("open");
+    document.getElementById("sidebarOverlay").classList.remove("open");
+    document.body.style.overflow = "";
+  }
+  function sidebarGo(tab) {
+    closeSidebar();
+    var btns = document.querySelectorAll(".tab-btn");
+    for (var i=0;i<btns.length;i++) btns[i].classList.remove("active");
+    var secs = document.querySelectorAll(".tab-section");
+    for (var i=0;i<secs.length;i++) secs[i].classList.remove("active");
+    var links = document.querySelectorAll(".sidebar-link");
+    for (var i=0;i<links.length;i++) links[i].classList.remove("active");
+    var btn = document.querySelector(".tab-btn[data-tab='" + tab + "']");
+    if (btn) btn.classList.add("active");
+    var sec = document.getElementById("tab-" + tab);
+    if (sec) sec.classList.add("active");
+    var lnk = document.querySelector(".sidebar-link[data-tab='" + tab + "']");
+    if (lnk) lnk.classList.add("active");
+    if (tab==="favorites" && typeof buildFavTab    ==="function") buildFavTab();
+    if (tab==="doubts"    && typeof buildDoubtsTab ==="function") buildDoubtsTab();
+    if (tab==="myfb"      && typeof buildMyFeedback==="function") buildMyFeedback();
+  }
+  function sidebarLogout() {
+    if (typeof AuthService!=="undefined") AuthService.logout();
+    window.location.href = "login.html";
+  }
+
+  /* ── Favorites ── */
+  var FAV_KEY = "edurate:favorites";
+  function getFavIds() {
+    try { return JSON.parse(localStorage.getItem(FAV_KEY))||[]; } catch(e){ return []; }
+  }
+  function toggleFav(id) {
+    var f=getFavIds(), idx=f.indexOf(id);
+    if(idx!==-1) f.splice(idx,1); else f.push(id);
+    localStorage.setItem(FAV_KEY, JSON.stringify(f));
+  }
+  function buildFavTab() {
+    // Show favorite professor section with photo and name
+    var favProfEl = document.getElementById("favProfSection");
+    if (favProfEl && typeof PerformancePredictor !== "undefined" && typeof currentUser !== "undefined") {
+      var favProf = PerformancePredictor.getFavoriteProfessor(currentUser.email);
+      var removeBtn = '';
+      var photoSection = '';
+      
+      if (favProf) {
+        // Find professor data
+        if (typeof PROFESSORS_DATA !== "undefined") {
+          var profData = PROFESSORS_DATA.find(function(p) { return p.id === parseInt(favProf.id); });
+          if (profData) {
+            var dc=(typeof DEPT_COLORS!=="undefined"&&DEPT_COLORS[profData.dept])?DEPT_COLORS[profData.dept]:"#c084fc";
+            photoSection = '<div style="width:80px;height:80px;border-radius:12px;overflow:hidden;border:2px solid rgba(251,191,36,0.3);background:'+dc+'18;flex-shrink:0">'
+              + '<img src="'+profData.image+'" style="width:100%;height:100%;object-fit:cover" '
+              + 'onerror="this.style.display=\'none\';this.nextSibling.style.display=\'flex\'"/>'
+              + '<div style="display:none;width:100%;height:100%;align-items:center;justify-content:center;font-size:36px;font-weight:900;color:'+dc+'">'
+              + profData.name.split(" ").filter(function(w){return w.length>1;}).map(function(w){return w[0];}).slice(0,2).join("")
+              + '</div></div>';
+          }
+        }
+        removeBtn = '<button class="btn-sm" style="background:#ef4444;color:#fff" onclick="removeFavProf()">Remove</button>';
+      }
+      
+      var html = '<div style="background:rgba(251,191,36,0.05);border:1px solid rgba(251,191,36,0.2);border-radius:16px;padding:20px;margin-bottom:20px;display:flex;justify-content:space-between;align-items:center;gap:16px">'
+        + photoSection
+        + '<div style="flex:1"><div style="font-size:13px;color:#888;margin-bottom:8px">⭐ Your Favorite Professor</div>'
+        + '<div style="font-size:16px;font-weight:700;color:#FBBF24">' + (favProf ? favProf.name : "Not selected yet") + '</div></div>'
+        + '<div style="display:flex;gap:8px;flex-shrink:0">'
+        + '<button class="btn-sm" onclick="openFavoriteProfModal()">Change</button>'
+        + removeBtn
+        + '</div>'
+        + '</div>';
+      favProfEl.innerHTML = html;
+    }
+    
+    var el=document.getElementById("favGrid");
+    if(!el) return;
+    var ids=getFavIds();
+    if(!ids.length){
+      el.innerHTML='<div class="fav-empty"><div style="font-size:52px;margin-bottom:12px">&#10084;&#65039;</div>'
+        +'<div style="font-size:16px;font-weight:700;margin-bottom:6px;color:#dde1f0">No favorites yet!</div>'
+        +'<div style="font-size:13px;color:#3a3a50">Click the heart on any professor card to add them here.</div></div>';
+    } else {
+      if(typeof PROFESSORS_DATA==="undefined") return;
+      var html="";
+      for(var i=0;i<PROFESSORS_DATA.length;i++){
+        var p=PROFESSORS_DATA[i];
+        if(ids.indexOf(p.id)===-1) continue;
+        var dc=(typeof DEPT_COLORS!=="undefined"&&DEPT_COLORS[p.dept])?DEPT_COLORS[p.dept]:"#c084fc";
+        var stars="";
+        for(var s=1;s<=5;s++)
+          stars+='<span style="font-size:13px;color:'+(s<=Math.round(p.rating)?"#FBBF24":"#2a2a3a")+'">&#9733;</span>';
+        html+='<div class="fav-card" onclick="openProfDetail('+p.id+')" style="padding:16px">'
+          +'<div class="fav-card-body" style="padding:0">'
+          +'<div style="display:flex;justify-content:space-between;align-items:flex-start">'
+          +'<div><div class="fav-card-name">'+p.name+'</div>'
+          +'<div class="fav-card-dept">'+p.dept+' &middot; '+p.subject+'</div></div>'
+          +'<button class="fav-heart" onclick="event.stopPropagation();toggleFav('+p.id+');buildFavTab()">&#128148;</button>'
+          +'</div>'
+          +'<div style="display:flex;gap:4px;margin-top:8px">'+stars
+          +'<span style="color:#FBBF24;font-weight:800;font-size:13px;margin-left:4px">'+p.rating+'</span>'
+          +'</div></div></div>';
+      }
+      el.innerHTML=html;
+    }
+    
+
+  }
+
+  window.removeFavProf = function() {
+    if (confirm("Remove favorite professor?")) {
+      if (typeof PerformancePredictor !== "undefined" && typeof currentUser !== "undefined") {
+        PerformancePredictor.setFavoriteProfessor(currentUser.email, null);
+        buildFavTab();
+      }
+    }
+  };
+
+function toggleSidebarDropdown() {
+  var dropdown = document.querySelector(".sidebar-dropdown");
+  dropdown.classList.toggle("open");
+}
+
+  </script>
+</head>
+<body>
+
+<!-- SIDEBAR OVERLAY -->
+<div class="sidebar-overlay" id="sidebarOverlay" onclick="closeSidebar()"></div>
+
+<!-- SIDEBAR — shown only when hamburger clicked -->
+<aside class="sidebar" id="sidebar">
+  <div class="sidebar-header">
+    <div class="sidebar-logo">&#127891; EduRate</div>
+    <button class="sidebar-close" onclick="closeSidebar()">&#10005;</button>
+  </div>
+  <button class="sidebar-home-btn" onclick="sidebarGo('home')">
+    <span class="s-icon">&#127968;</span> Home
+  </button>
+  <div class="sidebar-user">
+    <div class="sidebar-avatar">&#128100;</div>
+    <div>
+      <div class="sidebar-uname" id="sidebarName">&#8212;</div>
+      <div class="sidebar-ubadge" id="sidebarBadge"></div>
+    </div>
+  </div>
+  <nav class="sidebar-nav">
+
+  <!-- Dropdown Wrapper -->
+  <div class="sidebar-dropdown">
+    <div class="sidebar-link active" onclick="toggleSidebarDropdown()">
+      <span class="s-icon">&#9776;</span> Menu
+    </div>
+
+    <div class="sidebar-dropdown-content" id="sidebarDropdown">
+      <a class="sidebar-link" onclick="sidebarGo('home')">
+        <span class="s-icon">&#127968;</span> Home
+      </a>
+      <a class="sidebar-link" onclick="sidebarGo('professors')">
+        <span class="s-icon">&#11088;</span> Give Rating
+      </a>
+      <a class="sidebar-link" onclick="sidebarGo('top10')">
+        <span class="s-icon">&#128104;&#8205;&#127979;</span> Professor Details
+      </a>
+      <a class="sidebar-link" onclick="sidebarGo('doubts')">
+        <span class="s-icon">&#10067;</span> Ask Doubt
+      </a>
+      <a class="sidebar-link" onclick="sidebarGo('favorites')">
+        <span class="s-icon">&#10084;&#65039;</span> Favorite Professor
+      </a>
+      <a class="sidebar-link" id="perfTab" style="display:none" onclick="sidebarGo('perf')">
+        <span class="s-icon">&#128202;</span> My Performance
+      </a>
+      <a class="sidebar-link" onclick="sidebarLogout()">
+        <span class="s-icon">&#128682;</span> Logout
+      </a>
+    </div>
+  </div>
+
+</nav>
+  <div class="sidebar-footer">
+    <a class="sidebar-link sidebar-logout" onclick="sidebarLogout()">
+      <span class="s-icon">&#128682;</span> Logout
+    </a>
+  </div>
+</aside>
+
+<!-- NAV -->
+<nav class="nav">
+  <!-- THREE PARALLEL LINES — hamburger button -->
+  <button class="hamburger" onclick="openSidebar()" title="Menu">
+    <span></span>
+    <span></span>
+    <span></span>
+  </button>
+  <div class="nav-logo"> EduRate</div>
+  <div class="tab-bar">
+    <button class="tab-btn active" data-tab="home">&#127968; Home</button>
+    <button class="tab-btn" id="perfTabBtn" style="display:none" data-tab="perf">&#128202; Performance</button>
+    <button class="tab-btn" id="myfbTab" style="display:none" data-tab="myfb">&#128202; My Feedback</button>
+  </div>
+  <div class="nav-right">
+    <span class="nav-name" id="navName"></span>
+    <span class="badge" id="navBadge"></span>
+    <button class="btn-sm btn-red" id="logoutBtn">Logout</button>
+  </div>
+</nav>
+
+<!-- DAILY QUOTE BAR -->
+<div class="quote-bar">
+  <span class="quote-icon">&#128161;</span>
+  <span class="quote-text" id="quoteText"></span>
+</div>
+
+<!-- MAIN -->
+<main class="main">
+
+  <!-- HOME TAB -->
+  <section id="tab-home" class="tab-section active">
+    <div class="slideshow-wrap">
+      <div class="slideshow-track" id="slideshowTrack"></div>
+      <div class="slideshow-dots" id="slideshowDots"></div>
+    </div>
+    <div class="stats-grid" id="statsGrid"></div>
+    <h2 class="sec-title">&#127942; Top Performer &#8212; Last Semester</h2>
+    <div class="top-perf-card" id="topPerfCard"></div>
+    <!-- CHANGED: red color note about current top performer -->
+    <div class="info-note" style="color:#f87171;border-color:rgba(248,113,113,0.25);background:rgba(248,113,113,0.06)">
+      &#127942; Till now top performer: <strong id="topPerfName">Loading...</strong>
+    </div>
+  </section>
+
+  <!-- GIVE RATING TAB -->
+  <section id="tab-professors" class="tab-section">
+    <div class="top3-header">
+      <h2 class="sec-title">&#127942; Top Rated This Semester</h2>
+      <div class="divider-gold"></div>
+    </div>
+    <p class="sec-sub">Highest rated professors based on End Semester student feedback</p>
+    <div class="top3-grid" id="top3Grid"></div>
+    <div class="divider" style="margin:32px 0"></div>
+    <div class="prof-header-row">
+      <h2 class="sec-title" id="allProfTitle">&#128104;&#8205;&#127979; All Professors</h2>
+      <div class="filter-row">
+        <input class="inp-sm" type="text" id="searchInput" placeholder="&#128269; Search..." />
+        <select class="inp-sm" id="deptFilter">
+          <option value="All">All Depts</option>
+          <option value="CSE">CSE</option>
+          <option value="ECE">ECE</option>
+          <option value="HBS">HBS</option>
+        </select>
+      </div>
+    </div>
+    <div class="prof-grid" id="profGrid"></div>
+  </section>
+
+  <!-- PROFESSOR DETAILS TAB -->
+  <section id="tab-top10" class="tab-section">
+    <h2 class="sec-title">&#127941; All Professors &#8212; Ranked by Rating</h2>
+    <p class="sec-sub">Click any professor to view full profile and details</p>
+    <div class="top10-list" id="top10List"></div>
+  </section>
+
+  <!-- ASK DOUBT TAB -->
+  <section id="tab-doubts" class="tab-section">
+    <div class="doubt-header-row">
+      <h2 class="sec-title">&#10067; Ask a Doubt</h2>
+      <button class="btn-sm" id="postDoubtBtn" style="display:none">+ Post Doubt</button>
+    </div>
+    <div class="doubt-limit-note" id="doubtLimitNote"></div>
+    <div class="doubts-list" id="doubtsList"></div>
+  </section>
+
+  <!-- FAVORITES TAB -->
+  <section id="tab-favorites" class="tab-section">
+    <h2 class="sec-title">&#10084;&#65039; Favorite Professors &#8212; All Time</h2>
+    <p class="sec-sub">Professors you have marked as favourite</p>
+    <div id="favProfSection"></div>
+    <div class="fav-grid" id="favGrid"></div>
+  </section>
+
+  <!-- MY FEEDBACK TAB -->
+  <section id="tab-myfb" class="tab-section">
+    <h2 class="sec-title">&#128202; My Feedback Dashboard</h2>
+    <div id="myfbContent"></div>
+  </section>
+
+  <!-- PERFORMANCE PREDICTOR TAB -->
+  <section id="tab-perf" class="tab-section">
+    <h2 class="sec-title">📈 Your Performance Prediction</h2>
+    <p class="sec-sub"></p>
+    <div id="perfContent"></div>
+  </section>
+
+</main>
+
+<!-- MODALS -->
+<div class="overlay" id="rateOverlay">
+  <div class="modal">
+    <h3 style="margin-bottom:6px">&#11088; Rate a Professor</h3>
+    <p class="modal-sub">Select a professor and share your feedback</p>
+    <div class="modal-label">SELECT PROFESSOR</div>
+    <select class="inp-sm" id="rateTeacher" style="width:100%;margin-bottom:12px;padding:10px 14px;background:rgba(255,255,255,0.055);border:1px solid rgba(255,255,255,0.09);border-radius:10px;color:#dde1f0;font-size:13px;font-family:'Syne',sans-serif;outline:none">
+      <option value="">-- Select Professor --</option>
+    </select>
+    <div class="modal-prof-header" id="rateHeader" style="display:none;margin-bottom:16px"></div>
+    <div class="modal-label">YOUR RATING</div>
+    <div class="star-input" id="starInput"></div>
+    <div class="modal-label" style="margin-top:16px">FEEDBACK (OPTIONAL)</div>
+    <textarea class="modal-ta" id="rateFeedback" placeholder="Share your experience with this professor..."></textarea>
+    <div class="modal-label" style="margin-top:4px;font-size:10px;color:#f87171" id="badWordWarn"></div>
+    <div class="modal-btns">
+      <button class="btn" id="submitRateBtn">Submit Rating</button>
+      <button class="btn btn-ghost" id="closeRateBtn">Cancel</button>
+    </div>
+  </div>
+</div>
+
+<div class="overlay" id="doubtOverlay">
+  <div class="modal">
+    <h3 style="margin-bottom:6px">&#10067; Post a Doubt</h3>
+    <p class="modal-sub">All professors can see and answer. Max 2 doubts/day.</p>
+    <div class="modal-label">SELECT TEACHER (OPTIONAL)</div>
+    <select class="inp-sm" id="doubtTeacher" style="width:100%;margin-bottom:12px;padding:10px 14px;background:rgba(255,255,255,0.055);border:1px solid rgba(255,255,255,0.09);border-radius:10px;color:#dde1f0;font-size:13px;font-family:'Syne',sans-serif;outline:none">
+      <option value="">All Teachers</option>
+    </select>
+    <div class="modal-label">YOUR DOUBT</div>
+    <textarea class="modal-ta" id="doubtText" placeholder="Write your doubt here..." style="min-height:130px"></textarea>
+    <div class="modal-label" style="font-size:10px;color:#f87171" id="doubtWarn"></div>
+    <div class="modal-btns">
+      <button class="btn" id="submitDoubtBtn">Post Doubt</button>
+      <button class="btn btn-ghost" id="closeDoubtBtn">Cancel</button>
+    </div>
+  </div>
+</div>
+
+<div class="overlay" id="profDetailOverlay">
+  <div class="modal modal-wide" id="profDetailContent"></div>
+</div>
+
+<div class="overlay" id="favProfOverlay">
+  <div class="modal">
+    <h3 style="margin-bottom:6px">⭐ Select Your Favorite Professor</h3>
+    <p class="modal-sub">This helps personalize your performance recommendations</p>
+    <div class="modal-label">CHOOSE PROFESSOR</div>
+    <select class="inp-sm" id="favProfSelect" style="width:100%;margin-bottom:12px;padding:10px 14px;background:rgba(255,255,255,0.055);border:1px solid rgba(255,255,255,0.09);border-radius:10px;color:#dde1f0;font-size:13px;font-family:'Syne',sans-serif;outline:none">
+      <option value="">-- No Favorite --</option>
+    </select>
+    <div class="modal-btns">
+      <button class="btn" id="saveFavProfBtn">Save Favorite</button>
+      <button class="btn btn-ghost" id="closeFavProfBtn">Cancel</button>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<!-- Scripts -->
+<script src="../js/data.js"></script>
+<script src="../js/auth.js"></script>
+<script src="../js/chatbot.js"></script>
+<script src="../js/rating.js"></script>
+<script src="../js/doubt-history.js"></script>
+<script src="../js/doubts.js"></script>
+<script src="../js/performance-predictor.js"></script>
+<script src="../js/dashboard.js"></script>
+
+<script>
+(function(){
+  var u=(typeof AuthService!=="undefined")?AuthService.getSession():null;
+  if(!u) return;
+  var n=document.getElementById("sidebarName");
+  if(n) n.textContent=u.name;
+  var b=document.getElementById("sidebarBadge");
+  if(b){ b.textContent=u.role.toUpperCase(); b.className="sidebar-ubadge "+(u.role==="student"?"badge-student":"badge-prof"); }
+  if(u.role==="professor"){
+    var m=document.getElementById("sidebarMyfb");
+    if(m) m.style.display="flex";
+  }
+  if(u.role==="student"){
+    var pt=document.getElementById("perfTab");
+    if(pt) pt.style.display="flex";
+  }
+})();
+</script>
+</body>
+</html>

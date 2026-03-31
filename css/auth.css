@@ -1,0 +1,409 @@
+/* ============================================================
+   css/auth.css  —  Login & Register pages
+   Login  : Neumorphic soft-UI (aapka exact design)
+   Register: Dark theme (unchanged)
+   ============================================================ */
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+/* ══════════════════════════════════════════════
+   LOGIN PAGE — Neumorphic / Soft-UI
+══════════════════════════════════════════════ */
+
+body {
+  margin: 0;
+  padding: 0;
+  font-family: 'Syne', sans-serif;
+  background: #dde1e7;
+  min-height: 100vh;
+}
+
+/* ── Center + Content positioning ── */
+.center,
+.content {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+/* ── Hidden checkbox ── */
+#click {
+  display: none;
+}
+
+/* ── Trigger button ── */
+.click-me {
+  display: block;
+  width: 160px;
+  height: 50px;
+  background: #dde1e7;
+  text-align: center;
+  font-size: 22px;
+  font-family: 'Syne', sans-serif;
+  line-height: 50px;
+  cursor: pointer;
+  box-shadow:
+    -3px -3px 7px #fffdfdcc,
+     3px  3px 5px rgba(94, 104, 121, 0.342);
+  transition: color 0.2s, box-shadow 0.2s;
+}
+
+.click-me:hover {
+  color: #08adef;
+  box-shadow:
+    inset  2px  2px 5px #babecc,
+    inset -5px -5px 10px #ffffff73;
+}
+
+/* ── Popup card ── */
+.content {
+  opacity: 0;
+  visibility: hidden;
+  width: 330px;
+  height: auto;
+  background: #dde1e7;
+  padding: 30px 35px 40px;
+  border-radius: 5px;
+  transition: opacity 0.3s ease, visibility 0.3s ease;
+  box-shadow:
+    -6px -6px 10px rgba(255, 255, 255, 0.8),
+     6px  6px 10px rgba(0, 0, 0, 0.2);
+}
+
+/* Show popup when checkbox checked */
+#click:checked ~ .content {
+  opacity: 1;
+  visibility: visible;
+}
+
+/* ── Close button ── */
+#times {
+  position: absolute;
+  right: 10px;
+  top: 20px;
+  font-size: 25px;
+  background: #dde1e7;
+  padding: 3px 11px;
+  border-radius: 50%;
+  box-shadow:
+    -4px -4px 7px #fffdfdb7,
+     3px  3px 5px rgba(94, 104, 121, 0.24);
+  cursor: pointer;
+  transition: color 0.2s;
+}
+#times:hover { color: #e74c3c; }
+
+/* ── IIIT Manipur Logo ── */
+.logo {
+  text-align: center;
+  margin-bottom: 4px;
+}
+
+.logo img {
+  width: 64px;
+  height: 64px;
+  object-fit: contain;
+  border-radius: 50%;
+  box-shadow:
+    -3px -3px 7px #fffdfccc,
+     3px  3px 5px rgba(94, 104, 121, 0.24);
+}
+
+.logo-fb {
+  display: none;
+  width: 64px;
+  height: 64px;
+  background: linear-gradient(135deg, #1e3a8a, #7c3aed);
+  border-radius: 50%;
+  align-items: center;
+  justify-content: center;
+  font-size: 18px;
+  font-weight: 900;
+  color: white;
+  margin: 0 auto;
+}
+
+/* ── Institute name ── */
+.inst-name {
+  text-align: center;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  color: #08adef;
+  margin-bottom: 4px;
+}
+
+/* ── LOGIN title ── */
+.text {
+  font-size: 30px;
+  color: #000000;
+  font-weight: 600;
+  text-align: center;
+  letter-spacing: 2px;
+  margin-bottom: 2px;
+}
+
+/* ── Error box ── */
+.err-box {
+  color: #e74c3c;
+  font-size: 12px;
+  margin: 10px 0 0;
+  background: rgba(231, 76, 60, 0.08);
+  padding: 9px 12px;
+  border-radius: 8px;
+  text-align: center;
+}
+
+/* ── Form ── */
+form {
+  margin-top: 40px;
+}
+
+form label {
+  display: block;
+  margin-top: 30px;
+  font-size: 16px;
+  font-weight: 500;
+  color: #333;
+}
+
+/* ── Inputs ── */
+form input {
+  display: block;
+  height: 43px;
+  width: 100%;
+  background-color: rgba(255, 255, 255, 0.07);
+  border-radius: 3px;
+  border: none;
+  outline: none;
+  box-shadow:
+    inset  2px  2px 5px #babecc,
+    inset -5px -5px 10px #ffffff73;
+  margin-top: 8px;
+  font-size: 14px;
+  font-weight: 300;
+  font-family: 'Syne', sans-serif;
+  color: #333;
+  padding: 0 12px;
+  transition: box-shadow 0.2s;
+}
+
+form input:focus {
+  box-shadow:
+    inset  3px  3px 7px #b0b4c0,
+    inset -4px -4px 8px #ffffff90;
+}
+
+::placeholder {
+  color: #4b4e4d;
+  padding-left: 10px;
+}
+
+/* ── Log In button ── */
+form button {
+  width: 100%;
+  margin-top: 35px;
+  padding: 12px;
+  background: #dde1e7;
+  border: none;
+  font-size: 17px;
+  font-weight: 600;
+  font-family: 'Syne', sans-serif;
+  color: #333;
+  cursor: pointer;
+  margin-bottom: 32px;
+  box-shadow:
+    -4px -4px 7px #fffdfdb7,
+     3px  3px 5px rgba(94, 104, 121, 0.388);
+  transition: box-shadow 0.2s, color 0.2s;
+}
+
+form button:hover {
+  color: #08adef;
+  box-shadow:
+    inset -3px -3px 7px #ffffffb0,
+    inset  3px  3px 5px rgba(94, 104, 121, 0.692);
+}
+
+/* ── Switch text ── */
+.switch-txt {
+  text-align: center;
+  margin-top: 0;
+  color: #888;
+  font-size: 12px;
+}
+
+.link {
+  color: #08adef;
+  font-weight: 700;
+  text-decoration: none;
+}
+.link:hover { text-decoration: underline; }
+
+/* ── Demo box ── */
+.demo-box {
+  margin-top: 14px;
+  padding: 11px 13px;
+  background: rgba(0, 0, 0, 0.04);
+  border-radius: 8px;
+  font-size: 10.5px;
+  color: #777;
+  line-height: 2;
+  box-shadow:
+    inset 1px 1px 3px #babecc,
+    inset -2px -2px 5px #ffffff73;
+}
+
+.demo-title {
+  color: #08adef;
+  font-weight: 700;
+}
+
+/* ══════════════════════════════════════════════
+   REGISTER PAGE — Dark theme (DO NOT CHANGE)
+══════════════════════════════════════════════ */
+
+.auth-bg {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background:
+    radial-gradient(ellipse 80% 80% at 20% 50%, #170a2e88, transparent),
+    radial-gradient(ellipse 60% 60% at 80% 20%, #0d1f3888, transparent),
+    #07070f;
+  padding: 20px;
+}
+
+.auth-card {
+  background: rgba(255,255,255,0.032);
+  border: 1px solid rgba(255,255,255,0.08);
+  border-radius: 24px;
+  padding: 44px;
+  width: 100%;
+  max-width: 420px;
+  backdrop-filter: blur(30px);
+  animation: slideUp 0.4s ease;
+}
+
+@keyframes slideUp {
+  from { opacity: 0; transform: translateY(20px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.auth-card .logo {
+  font-size: 25px;
+  text-align: center;
+  margin-bottom: 10px;
+}
+
+.auth-card h1 {
+  font-size: 30px;
+  font-weight: 800;
+  text-align: center;
+  background: linear-gradient(135deg, #c084fc, #38bdf8);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  display: inline-block;
+  letter-spacing: -0.02em;
+}
+
+.auth-card .sub {
+  text-align: center;
+  color: #444;
+  font-size: 11px;
+  letter-spacing: 0.06em;
+  font-weight: 600;
+  margin: 6px 0 28px;
+}
+
+.auth-card .inp {
+  width: 100%;
+  padding: 13px 16px;
+  background: rgba(255,255,255,0.055);
+  border: 1px solid rgba(255,255,255,0.09);
+  border-radius: 12px;
+  color: #dde1f0;
+  font-size: 14px;
+  font-family: 'Syne', sans-serif;
+  outline: none;
+  margin-bottom: 12px;
+  transition: border-color 0.2s;
+  height: auto;
+  box-shadow: none;
+}
+.auth-card .inp:focus {
+  border-color: rgba(192,132,252,0.5);
+  box-shadow: none;
+}
+.auth-card .inp::placeholder { color: #3a3a5a; }
+
+.auth-card .sel { cursor: pointer; }
+.auth-card option { background: #0c0c1a; }
+
+.auth-card .btn {
+  width: 100%;
+  padding: 14px;
+  background: linear-gradient(135deg, #c084fc, #38bdf8);
+  border: none;
+  border-radius: 12px;
+  color: #fff;
+  font-size: 15px;
+  font-weight: 800;
+  font-family: 'Syne', sans-serif;
+  cursor: pointer;
+  letter-spacing: 0.02em;
+  transition: opacity 0.2s;
+  margin-top: 0;
+  box-shadow: none;
+}
+.auth-card .btn:hover {
+  opacity: 0.9;
+  box-shadow: none;
+  color: #fff;
+}
+
+.auth-card .err-box {
+  color: #f87171;
+  background: rgba(248,113,113,0.08);
+  border: none;
+}
+
+.auth-card .suc-box {
+  color: #4ade80;
+  font-size: 12px;
+  margin-bottom: 14px;
+  background: rgba(74,222,128,0.08);
+  padding: 10px 14px;
+  border-radius: 10px;
+  text-align: center;
+}
+
+.auth-card .switch-txt {
+  text-align: center;
+  margin-top: 18px;
+  color: #444;
+  font-size: 13px;
+}
+
+.auth-card .link {
+  color: #c084fc;
+  font-weight: 700;
+  text-decoration: none;
+}
+.auth-card .link:hover { text-decoration: underline; }
+
+.auth-card .demo-box {
+  margin-top: 22px;
+  padding: 14px;
+  background: rgba(192,132,252,0.06);
+  border-radius: 12px;
+  font-size: 11px;
+  color: #444;
+  line-height: 2;
+  box-shadow: none;
+}
+
+.auth-card .demo-title { color: #c084fc; font-weight: 700; }

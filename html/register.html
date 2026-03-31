@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>EduRate — Register</title>
+  <link rel="stylesheet" href="../css/auth.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&display=swap" rel="stylesheet"/>
+</head>
+<body>
+  <div class="auth-bg">
+    <div class="auth-card">
+      <div class="logo">✨</div>
+      <h1>Join EduRate</h1>
+      <p class="sub">IIIT MANIPUR STUDENT PORTAL</p>
+
+      <div class="err-box" id="regErr" style="display:none"></div>
+      <div class="suc-box" id="regSuc" style="display:none"></div>
+
+      <form id="registerForm" novalidate>
+        <input class="inp" type="text"     id="regName"    placeholder="Full Name" required />
+        <input class="inp" type="email"    id="regEmail"   placeholder="Email Address" required />
+        <input class="inp" type="text"     id="regRoll"    placeholder="Roll Number (e.g. CS2024001)" />
+        <input class="inp" type="password" id="regPass"    placeholder="Create Password (min 6 chars)" required />
+        <input class="inp" type="password" id="regPass2"   placeholder="Confirm Password" required />
+        <select class="inp sel" id="regRole">
+          <option value="student">🎓 Student</option>
+          <option value="professor">👨‍🏫 Professor</option>
+        </select>
+        <button class="btn" type="submit">Create Account →</button>
+      </form>
+
+      <p class="switch-txt">Already registered?
+        <a href="login.html" class="link">Login here</a>
+      </p>
+    </div>
+  </div>
+
+  <script src="../js/auth.js"></script>
+  <script>
+    // Redirect if already logged in
+    if (AuthService.isLoggedIn()) {
+      window.location.href = 'dashboard.html';
+    }
+
+    document.getElementById('registerForm').addEventListener('submit', async function(e) {
+      e.preventDefault();
+      
+      const name = document.getElementById('regName').value.trim();
+      const email = document.getElementById('regEmail').value.trim();
+      const password = document.getElementById('regPass').value;
+      const password2 = document.getElementById('regPass2').value;
+      const role = document.getElementById('regRole').value;
+
+      // Validation
+      if (!name || !email || !password) {
+        return showErr('regErr', '❌ All fields are required');
+      }
+      
+      if (password.length < 6) {
+        return showErr('regErr', '❌ Password must be at least 6 characters');
+      }
+      
+      if (password !== password2) {
+        return showErr('regErr', '❌ Passwords do not match');
+      }
+
+      const btn = this.querySelector('button');
+      const originalText = btn.textContent;
+      btn.disabled = true;
+      btn.textContent = 'Creating account...';
+
+      console.log('Registering user:', { name, email, role });
+      
+      const result = await AuthService.register({ name, email, password, role });
+
+      if (result.success) {
+        showSuc('regSuc', '✅ Account created! Redirecting...');
+        setTimeout(() => {
+          const user = result.user;
+          const redirectUrl = user.role === 'admin' ? 'admin-dashboard.html' : 'dashboard.html';
+          window.location.href = redirectUrl;
+        }, 1200);
+      } else {
+        showErr('regErr', result.message);
+        btn.disabled = false;
+        btn.textContent = originalText;
+      }
+    });
+  </script>
+</body>
+</html>

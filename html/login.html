@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>EduRate — Login | IIIT Manipur</title>
+  <link rel="stylesheet" href="../css/auth.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&display=swap" rel="stylesheet"/>
+</head>
+<body>
+
+<!-- Center trigger button -->
+<div class="center">
+  <label for="click" class="click-me">Login</label>
+</div>
+
+<!-- Hidden checkbox -->
+<input type="checkbox" id="click" />
+
+<!-- Popup form -->
+<div class="content">
+
+  <!-- Close button -->
+  <label for="click" id="times">&#10005;</label>
+
+  <!-- IIIT Manipur Logo -->
+  <div class="logo">
+    <img
+      src="logo.png"
+      alt="IIIT Manipur"
+      onerror="this.style.display='none';this.nextElementSibling.style.display='flex'"
+    />
+    <div class="logo-fb">IIIT</div>
+  </div>
+  <div class="inst-name">IIIT MANIPUR</div>
+
+  <!-- Title -->
+  <div class="text">LOGIN</div>
+
+  <!-- Error box -->
+  <div class="err-box" id="loginErr" style="display:none"></div>
+
+  <!-- Form -->
+  <form id="loginForm" novalidate>
+    <label for="loginEmail">Email</label>
+    <input type="email" id="loginEmail" placeholder="Email or Phone" required />
+
+    <label for="loginPass">Password</label>
+    <input type="password" id="loginPass" placeholder="Password" required />
+
+    <button type="submit">Log In</button>
+  </form>
+
+  <p class="switch-txt">
+    New here? <a href="register.html" class="link">Create account</a>
+  </p>
+
+  <div class="demo-box">
+    <div class="demo-title">&#128273; Demo Accounts</div>
+    Student &nbsp;&mdash;&nbsp; ravi@student.edu &nbsp;/&nbsp; ravi123<br/>
+    Professor &nbsp;&mdash;&nbsp; director@iiitmanipur.ac.in &nbsp;/&nbsp; prof123
+  </div>
+
+</div>
+
+<script src="../js/auth.js"></script>
+<script>
+  // Redirect if already logged in
+  if (AuthService.isLoggedIn()) {
+    const user = AuthService.getSession();
+    const redirectUrl = user.role === 'admin' ? 'admin-dashboard.html' : 'dashboard.html';
+    window.location.href = redirectUrl;
+  }
+
+  document.getElementById("loginForm").addEventListener("submit", async function(e) {
+    e.preventDefault();
+    var email = document.getElementById("loginEmail").value.trim();
+    var pass  = document.getElementById("loginPass").value;
+    if (!email || !pass) return showErr("loginErr", "&#10060; Please fill in all fields");
+    
+    const btn = e.target.querySelector('button');
+    const originalText = btn.textContent;
+    btn.disabled = true;
+    btn.textContent = 'Logging in...';
+    
+    const result = await AuthService.login(email, pass);
+    
+    if (result.success) {
+      const user = result.user;
+      // Redirect based on role
+      const redirectUrl = user.role === 'admin' ? 'admin-dashboard.html' : 'dashboard.html';
+      window.location.href = redirectUrl;
+    } else {
+      showErr("loginErr", result.message);
+      btn.disabled = false;
+      btn.textContent = originalText;
+    }
+  });
+</script>
+
+</body>
+</html>

@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin Dashboard - EduRate</title>
+  <link rel="stylesheet" href="../css/admin-dashboard.css">
+  <link rel="stylesheet" href="../css/dashboard.css">
+</head>
+<body>
+  <div class="navbar">
+    <div class="nav-left">
+      <h2 class="logo">🎓 EduRate Admin</h2>
+    </div>
+    <div class="nav-right">
+      <span class="nav-user">
+        <span id="navName">Admin</span>
+        <span id="navBadge" class="badge badge-admin">ADMIN</span>
+      </span>
+      <button id="logoutBtn" class="btn-logout">🔓 Logout</button>
+    </div>
+  </div>
+
+  <div class="admin-container">
+    <!-- SIDEBAR MENU -->
+    <aside class="admin-sidebar">
+      <div class="sidebar-menu">
+        <button class="menu-btn active" data-view="overview">📊 Overview</button>
+        <button class="menu-btn" data-view="all-teachers">👨‍🏫 All Teachers</button>
+        <button class="menu-btn" data-view="top-performers">🌟 Top Performers</button>
+        <button class="menu-btn" data-view="email-center">📧 Email Center</button>
+        <button class="menu-btn" data-view="analytics">📈 Analytics</button>
+      </div>
+    </aside>
+
+    <!-- MAIN CONTENT -->
+    <main class="admin-content">
+      <!-- OVERVIEW SECTION -->
+      <section id="overview-view" class="view-section active">
+        <h1>📊 Dashboard Overview</h1>
+        
+        <!-- Statistics Cards -->
+        <div class="stats-cards">
+          <div class="stat-card">
+            <div class="stat-icon">👨‍🏫</div>
+            <div class="stat-info">
+              <div class="stat-label">Total Teachers</div>
+              <div class="stat-value" id="totalTeachers">-</div>
+            </div>
+          </div>
+
+          <div class="stat-card">
+            <div class="stat-icon">⭐</div>
+            <div class="stat-info">
+              <div class="stat-label">Avg Rating</div>
+              <div class="stat-value" id="avgOverallRating">-</div>
+            </div>
+          </div>
+
+          <div class="stat-card">
+            <div class="stat-icon">⭐⭐⭐⭐⭐</div>
+            <div class="stat-info">
+              <div class="stat-label">Top Performer</div>
+              <div class="stat-value" id="topTeacher">-</div>
+            </div>
+          </div>
+
+          <div class="stat-card">
+            <div class="stat-icon">📧</div>
+            <div class="stat-info">
+              <div class="stat-label">Emails Sent</div>
+              <div class="stat-value" id="emailsSent">-</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- TOP 5 PERFORMERS -->
+        <div class="section-box">
+          <h2>🌟 Top 5 Performers This Month</h2>
+          <table class="teachers-table">
+            <thead>
+              <tr>
+                <th>#</th>
+                <th>Teacher Name</th>
+                <th>Department</th>
+                <th>Rating</th>
+                <th>Total Ratings</th>
+                <th>Doubts Answered</th>
+                <th>Action</th>
+              </tr>
+            </thead>
+            <tbody id="topPerformersBody">
+              <tr><td colspan="7">Loading...</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- ALL TEACHERS SECTION -->
+      <section id="all-teachers-view" class="view-section">
+        <h1>👨‍🏫 All Teachers Management</h1>
+        
+        <div class="section-box">
+          <div class="filter-bar">
+            <input type="text" id="searchTeacher" class="search-input" placeholder="Search teacher name or email...">
+            <select id="departmentFilter" class="filter-select">
+              <option value="">All Departments</option>
+              <option value="CSE">CSE</option>
+              <option value="ECE">ECE</option>
+              <option value="HBS">HBS</option>
+            </select>
+            <select id="sortBy" class="filter-select">
+              <option value="rating-desc">Highest Rating</option>
+              <option value="rating-asc">Lowest Rating</option>
+              <option value="name-asc">Name (A-Z)</option>
+              <option value="name-desc">Name (Z-A)</option>
+            </select>
+          </div>
+
+          <table class="teachers-table">
+            <thead>
+              <tr>
+                <th>Teacher Name</th>
+                <th>Email</th>
+                <th>Department</th>
+                <th>Subject</th>
+                <th>Rating</th>
+                <th>Total Ratings</th>
+                <th>Doubts</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody id="allTeachersBody">
+              <tr><td colspan="8">Loading...</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- TOP PERFORMERS SECTION -->
+      <section id="top-performers-view" class="view-section">
+        <h1>🌟 Top Performers Rankings</h1>
+        
+        <div class="section-box">
+          <div class="ranking-list" id="rankingList">
+            <div class="loading">Loading top performers...</div>
+          </div>
+        </div>
+      </section>
+
+      <!-- EMAIL CENTER SECTION -->
+      <section id="email-center-view" class="view-section">
+        <h1>📧 Email Center</h1>
+        
+        <div class="section-box">
+          <h2>Send Performance Reports</h2>
+          <p style="color: #666; margin-bottom: 20px;">Send performance data emails to teachers to help them improve their teaching quality.</p>
+
+          <div class="email-options">
+            <div class="option-card">
+              <h3>📧 Send to All Teachers</h3>
+              <p>Send performance reports to all teachers in the system</p>
+              <button id="sendBulkBtn" class="btn btn-primary">Send Bulk Email</button>
+            </div>
+
+            <div class="option-card">
+              <h3>👤 Send to Specific Teacher</h3>
+              <p>Select a teacher and send performance report</p>
+              <div style="display: flex; gap: 10px;">
+                <select id="teacherSelect" class="filter-select" style="flex: 1;">
+                  <option value="">Select a teacher...</option>
+                </select>
+                <button id="sendIndividualBtn" class="btn btn-secondary">Send Email</button>
+              </div>
+            </div>
+          </div>
+
+          <div class="section-box" style="margin-top: 30px;">
+            <h3>📨 Email History</h3>
+            <div id="emailHistory" class="email-history">
+              <p style="color: #999;">Email history will appear here</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ANALYTICS SECTION -->
+      <section id="analytics-view" class="view-section">
+        <h1>📈 Analytics & Insights</h1>
+        
+        <div class="analytics-grid">
+          <div class="section-box">
+            <h2>Rating Distribution</h2>
+            <canvas id="ratingChart"></canvas>
+          </div>
+
+          <div class="section-box">
+            <h2>Department Performance</h2>
+            <canvas id="deptChart"></canvas>
+          </div>
+
+          <div class="section-box">
+            <h2>Recent Activities</h2>
+            <div id="activitiesList" class="activities-list">
+              <p>Loading recent activities...</p>
+            </div>
+          </div>
+
+          <div class="section-box">
+            <h2>Email Statistics</h2>
+            <div id="emailStats" class="stats-box">
+              <p>📧 Total Emails Sent: <strong id="totalEmailsSent">0</strong></p>
+              <p>✅ Successful: <strong id="successEmails">0</strong></p>
+              <p>❌ Failed: <strong id="failedEmails">0</strong></p>
+              <p>📅 Last Sent: <strong id="lastEmailSent">Never</strong></p>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <!-- TOAST NOTIFICATION -->
+  <div id="toast" class="toast"></div>
+
+  <!-- MODAL FOR TEACHER DETAILS -->
+  <div id="teacherModal" class="modal">
+    <div class="modal-content">
+      <span class="close">&times;</span>
+      <h2 id="modalTeacherName">Teacher Details</h2>
+      <div id="modalTeacherInfo"></div>
+    </div>
+  </div>
+
+  <script src="../js/auth.js"></script>
+  <script>
+    // Protect admin dashboard - only admins allowed!
+    if (!AuthService.isLoggedIn()) {
+      window.location.href = 'login.html';
+    } else if (!AuthService.isAdmin()) {
+      alert('❌ Access Denied! Only admins can access this page.');
+      window.location.href = 'dashboard.html';
+    }
+  </script>
+  <script src="../js/admin-dashboard.js"></script>
+</body>
+</html>
