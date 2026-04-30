@@ -584,6 +584,46 @@ function generatePerformanceEmailHTML(prof) {
 }
 
 // ─────────────────────────────────────────────────────────
+//  API: GET RATING TREND BY DATE (NEW FEATURE)
+// ─────────────────────────────────────────────────────────
+app.get('/api/professor/:id/trend', authMiddleware, async (req, res) => {
+  try {
+    const { id } = req.params;
+    const connection = await pool.getConnection();
+
+    // Get all ratings for a professor, grouped by date
+    const [ratings] = await connection.query(`
+      SELECT 
+        DATE(created_at) as date,
+        AVG(stars) as avg_rating,
+        COUNT(*) as count
+      FROM ratings
+      WHERE professor_id = ?
+      GROUP BY DATE(created_at)
+      ORDER BY date ASC
+    `, [id]);
+
+    connection.release();
+
+    // Format data for Chart.js
+    const trendData = ratings.map(r => ({
+      date: r.date,
+      avgRating: parseFloat(r.avg_rating).toFixed(2),
+      count: r.count
+    }));
+
+    res.json({
+      success: true,
+      data: trendData,
+      professorId: id
+    });
+  } catch (error) {
+    console.error('Error fetching rating trend:', error);
+    res.status(500).json({ error: 'Failed to fetch rating trend' });
+  }
+});
+
+// ─────────────────────────────────────────────────────────
 //  START SERVER
 // ─────────────────────────────────────────────────────────
 app.listen(PORT, () => {

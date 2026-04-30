@@ -1,0 +1,468 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Performance Predictor — EduRate</title>
+  <link rel="stylesheet" href="../css/dashboard.css" />
+  <link rel="stylesheet" href="../css/modals.css" />
+  <style>
+    body { 
+      font-family: 'Syne', sans-serif; 
+      background: #0d0d1a; 
+      color: #dde1f0; 
+      padding: 20px;
+    }
+    
+    .predictor-wrapper { 
+      max-width: 600px; 
+      margin: 40px auto; 
+      background: rgba(255, 255, 255, 0.02);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 16px;
+      padding: 40px;
+    }
+    
+    .predictor-header { 
+      display: flex; 
+      justify-content: space-between; 
+      align-items: center; 
+      margin-bottom: 30px; 
+    }
+    
+    .predictor-header h1 { 
+      margin: 0; 
+      font-size: 28px; 
+      font-weight: 700; 
+      color: #c084fc;
+    }
+    
+    .back-btn { 
+      background: rgba(96, 165, 250, 0.1); 
+      border: 1px solid rgba(96, 165, 250, 0.3); 
+      color: #60a5fa; 
+      padding: 10px 20px; 
+      border-radius: 8px; 
+      cursor: pointer; 
+      font-weight: 600;
+      transition: all 0.2s;
+    }
+    
+    .back-btn:hover { 
+      background: rgba(96, 165, 250, 0.2); 
+      border-color: rgba(96, 165, 250, 0.5);
+    }
+
+    .progress-bar { 
+      height: 4px; 
+      background: rgba(255, 255, 255, 0.1); 
+      border-radius: 2px; 
+      margin-bottom: 30px; 
+      overflow: hidden; 
+    }
+    
+    .progress-fill { 
+      height: 100%; 
+      background: linear-gradient(90deg, #667eea, #c084fc); 
+      transition: width 0.3s; 
+    }
+
+    .step-container { 
+      display: none; 
+    }
+    
+    .step-container.active { 
+      display: block; 
+      animation: fadeIn 0.3s; 
+    }
+    
+    @keyframes fadeIn { 
+      from { opacity: 0; } 
+      to { opacity: 1; } 
+    }
+
+    .step-title { 
+      font-size: 22px; 
+      font-weight: 700; 
+      margin-bottom: 10px; 
+      color: #c084fc; 
+    }
+    
+    .step-desc { 
+      font-size: 14px; 
+      color: #999; 
+      margin-bottom: 30px; 
+    }
+
+    .form-group { 
+      margin-bottom: 25px; 
+    }
+    
+    .form-label { 
+      display: block; 
+      font-size: 12px; 
+      font-weight: 700; 
+      margin-bottom: 10px; 
+      color: #dde1f0; 
+      text-transform: uppercase; 
+      letter-spacing: 0.5px;
+    }
+    
+    .form-input, .form-select { 
+      width: 100%; 
+      padding: 12px 16px; 
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(192, 132, 252, 0.3); 
+      color: #dde1f0;
+      border-radius: 8px; 
+      font-size: 14px; 
+      font-family: 'Syne', sans-serif;
+      transition: all 0.2s;
+      box-sizing: border-box;
+    }
+    
+    .form-input:focus, .form-select:focus { 
+      outline: none; 
+      background: rgba(192, 132, 252, 0.1); 
+      border-color: rgba(192, 132, 252, 0.6); 
+      box-shadow: 0 0 0 3px rgba(192, 132, 252, 0.1);
+    }
+
+    .toggle-group { 
+      display: flex; 
+      gap: 12px; 
+    }
+    
+    .toggle-btn { 
+      flex: 1; 
+      padding: 12px; 
+      background: rgba(255, 255, 255, 0.05); 
+      border: 1px solid rgba(192, 132, 252, 0.3);
+      color: #dde1f0; 
+      border-radius: 8px; 
+      cursor: pointer; 
+      font-weight: 600; 
+      transition: all 0.2s;
+    }
+    
+    .toggle-btn.active { 
+      background: rgba(192, 132, 252, 0.3); 
+      border-color: rgba(192, 132, 252, 0.6); 
+      color: #c084fc;
+    }
+
+    .range-row { 
+      margin-bottom: 25px;
+    }
+    
+    .range-display { 
+      display: flex; 
+      justify-content: space-between; 
+      margin-bottom: 8px;
+      font-size: 13px; 
+      color: #999; 
+    }
+    
+    .range-value { 
+      font-size: 16px; 
+      font-weight: 700; 
+      color: #c084fc; 
+    }
+    
+    .range-input { 
+      width: 100%; 
+      height: 6px; 
+      border-radius: 3px; 
+      background: rgba(192, 132, 252, 0.2);
+      -webkit-appearance: none; 
+      appearance: none;
+    }
+    
+    .range-input::-webkit-slider-thumb { 
+      -webkit-appearance: none; 
+      appearance: none; 
+      width: 24px; 
+      height: 24px;
+      border-radius: 50%; 
+      background: #c084fc; 
+      cursor: pointer; 
+      border: 3px solid #0d0d1a;
+    }
+    
+    .range-input::-moz-range-thumb { 
+      width: 24px; 
+      height: 24px; 
+      border-radius: 50%; 
+      background: #c084fc;
+      cursor: pointer; 
+      border: 3px solid #0d0d1a;
+    }
+
+    .button-group { 
+      display: flex; 
+      gap: 12px; 
+      margin-top: 40px; 
+    }
+    
+    .btn { 
+      flex: 1; 
+      padding: 14px; 
+      border: none; 
+      border-radius: 8px; 
+      font-size: 14px; 
+      font-weight: 700;
+      cursor: pointer; 
+      transition: all 0.2s; 
+      font-family: 'Syne', sans-serif;
+    }
+    
+    .btn-prev { 
+      background: rgba(255, 255, 255, 0.1); 
+      color: #dde1f0; 
+      border: 1px solid rgba(255, 255, 255, 0.2);
+    }
+    
+    .btn-prev:hover { 
+      background: rgba(255, 255, 255, 0.15);
+    }
+    
+    .btn-next { 
+      background: linear-gradient(135deg, #667eea, #764ba2); 
+      color: #fff;
+    }
+    
+    .btn-next:hover { 
+      opacity: 0.9; 
+      transform: translateY(-2px);
+    }
+    
+    .btn-predict { 
+      background: linear-gradient(135deg, #10b981, #059669); 
+      color: #fff;
+    }
+    
+    .btn-predict:hover { 
+      opacity: 0.9; 
+      transform: translateY(-2px);
+    }
+
+    .result-display { 
+      display: none;
+      text-align: center;
+      margin-top: 40px;
+    }
+    
+    .result-display.show { 
+      display: block;
+      animation: fadeIn 0.3s;
+    }
+    
+    .result-box { 
+      background: linear-gradient(135deg, rgba(16, 185, 129, 0.15), rgba(5, 150, 105, 0.15));
+      border: 2px solid rgba(16, 185, 129, 0.3); 
+      border-radius: 12px; 
+      padding: 40px;
+      margin-bottom: 20px;
+    }
+    
+    .result-score { 
+      font-size: 56px; 
+      font-weight: 800; 
+      color: #10b981; 
+      margin: 20px 0;
+    }
+    
+    .result-text { 
+      font-size: 16px; 
+      color: #dde1f0; 
+      margin-bottom: 10px;
+    }
+    
+    .result-message { 
+      font-size: 14px; 
+      color: #999; 
+      margin-bottom: 20px; 
+      line-height: 1.6;
+    }
+    
+    .btn-restart { 
+      background: rgba(96, 165, 250, 0.1); 
+      color: #60a5fa; 
+      border: 1px solid rgba(96, 165, 250, 0.3);
+      padding: 12px 24px; 
+      border-radius: 8px; 
+      cursor: pointer; 
+      font-weight: 600;
+      margin-top: 20px;
+    }
+    
+    .btn-restart:hover { 
+      background: rgba(96, 165, 250, 0.2);
+    }
+
+    .error-msg { 
+      display: none;
+      background: rgba(239, 68, 68, 0.1); 
+      border: 1px solid rgba(239, 68, 68, 0.3);
+      color: #fca5a5; 
+      padding: 15px; 
+      border-radius: 8px; 
+      margin-bottom: 20px; 
+      font-size: 13px;
+    }
+    
+    .error-msg.show { 
+      display: block;
+    }
+  </style>
+</head>
+<body>
+  <div class="predictor-wrapper">
+    <div class="predictor-header">
+      <h1>🎓 Performance Predictor</h1>
+      <button class="back-btn" onclick="window.history.back()">← Back</button>
+    </div>
+
+    <div class="progress-bar">
+      <div class="progress-fill" id="progressFill" style="width: 33%;"></div>
+    </div>
+
+    <div id="errorMsg" class="error-msg"></div>
+
+    <!-- STEP 1: Semester -->
+    <div class="step-container active" id="step1">
+      <div class="step-title">Step 1: Select Semester</div>
+      <div class="step-desc">Which semester are you predicting for?</div>
+      <div class="form-group">
+        <label class="form-label">Semester</label>
+        <select class="form-select" id="semesterSelect">
+          <option value="">-- Choose a semester --</option>
+          <option value="1">Semester 1</option>
+          <option value="2">Semester 2</option>
+          <option value="3">Semester 3</option>
+          <option value="4">Semester 4</option>
+          <option value="5">Semester 5</option>
+          <option value="6">Semester 6</option>
+          <option value="7">Semester 7</option>
+          <option value="8">Semester 8</option>
+        </select>
+      </div>
+    </div>
+
+    <!-- STEP 2: Subject -->
+    <div class="step-container" id="step2">
+      <div class="step-title">Step 2: Enter Subject</div>
+      <div class="step-desc">Which subject is this exam for?</div>
+      <div class="form-group">
+        <label class="form-label">Subject Name</label>
+        <input class="form-input" id="subjectInput" type="text" placeholder="e.g., Data Structures, Calculus"/>
+      </div>
+    </div>
+
+    <!-- STEP 3: Full Form -->
+    <div class="step-container" id="step3">
+      <div class="step-title">Step 3: Exam Details</div>
+      <div class="step-desc">Tell us about your preparation</div>
+
+      <div class="form-group">
+        <label class="form-label">Type of Exam</label>
+        <select class="form-select" id="examType">
+          <option value="">-- Choose exam type --</option>
+          <option value="Assignment 1">Assignment 1</option>
+          <option value="Assignment 2">Assignment 2</option>
+          <option value="Assignment 3">Assignment 3</option>
+          <option value="Mid Semester">Mid Semester</option>
+          <option value="End Semester">End Semester</option>
+          <option value="Quiz">Quiz</option>
+          <option value="Practical">Practical</option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">Did you make notes?</label>
+        <div class="toggle-group">
+          <button class="toggle-btn active" data-value="true" onclick="toggleNotes(true)">Yes</button>
+          <button class="toggle-btn" data-value="false" onclick="toggleNotes(false)">No</button>
+        </div>
+        <input type="hidden" id="notesMade" value="true"/>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">Hours Studied Before Exam</label>
+        <input class="form-input" id="studyBefore" type="number" min="0" max="168" placeholder="e.g., 20" value="0"/>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">Hours Studied on Last Day</label>
+        <input class="form-input" id="studyLastDay" type="number" min="0" max="24" placeholder="e.g., 4" value="0"/>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">Your Interest Level in Subject</label>
+        <div class="range-row">
+          <div class="range-display">
+            <span>Low</span>
+            <span class="range-value" id="interestValue">3/5</span>
+            <span>High</span>
+          </div>
+          <input class="range-input" id="interest" type="range" min="1" max="5" value="3" oninput="updateInterestDisplay()"/>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">Previous Exam Marks (Obtained)</label>
+        <input class="form-input" id="previousMarks" type="number" min="0" placeholder="e.g., 72" value="0"/>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">Previous Exam Total Marks</label>
+        <input class="form-input" id="totalMarks" type="number" min="1" placeholder="e.g., 100" value="0"/>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">Assignment Completion (%)</label>
+        <div class="range-row">
+          <div class="range-display">
+            <span>0%</span>
+            <span class="range-value" id="assignmentValue">50%</span>
+            <span>100%</span>
+          </div>
+          <input class="range-input" id="assignment" type="range" min="0" max="100" value="50" oninput="updateAssignmentDisplay()"/>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">Class Attendance (%)</label>
+        <div class="range-row">
+          <div class="range-display">
+            <span>0%</span>
+            <span class="range-value" id="attendanceValue">70%</span>
+            <span>100%</span>
+          </div>
+          <input class="range-input" id="attendance" type="range" min="0" max="100" value="70" oninput="updateAttendanceDisplay()"/>
+        </div>
+      </div>
+    </div>
+
+    <!-- RESULT -->
+    <div class="result-display" id="resultDisplay">
+      <div class="result-box">
+        <div style="font-size: 24px; margin-bottom: 10px;">🎯 Your Prediction</div>
+        <div class="result-score" id="resultScore">8.5 / 10</div>
+        <div class="result-text" id="resultCategory">Excellent Performance</div>
+        <div class="result-message" id="resultMessage">Based on your input, this is your predicted performance in the upcoming exam.</div>
+      </div>
+      <button class="btn-restart" onclick="restartForm()">Try Again</button>
+    </div>
+
+    <!-- Buttons -->
+    <div class="button-group" id="buttonGroup">
+      <button class="btn btn-prev" id="prevBtn" onclick="previousStep()" style="display: none;">← Previous</button>
+      <button class="btn btn-next" id="nextBtn" onclick="nextStep()">Next →</button>
+    </div>
+  </div>
+
+  <script src="../js/auth.js"></script>
+  <script src="../js/perf-predictor.js"></script>
+</body>
+</html>

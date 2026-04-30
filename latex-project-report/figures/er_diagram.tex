@@ -1,0 +1,17 @@
+\begin{tikzpicture}[
+  node distance=1.7cm and 2.3cm,
+  ent/.style={draw, minimum width=2.8cm, minimum height=0.9cm, fill=purple!10, align=center},
+  rel/.style={-Stealth, thick}
+]
+\node[ent] (users) {USERS};
+\node[ent, right=of users] (ratings) {RATINGS};
+\node[ent, right=of ratings] (profs) {PROFESSORS};
+\node[ent, below=of ratings] (doubts) {DOUBTS};
+\node[ent, below=of users] (sessions) {SESSIONS};
+
+\draw[rel] (users) -- node[above]{gives} (ratings);
+\draw[rel] (ratings) -- node[above]{for} (profs);
+\draw[rel] (users) -- node[left]{posts} (doubts);
+\draw[rel] (profs) -- node[right]{answers} (doubts);
+\draw[rel] (users) -- node[left]{has} (sessions);
+\end{tikzpicture}

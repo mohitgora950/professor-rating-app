@@ -1,0 +1,23 @@
+\begin{tikzpicture}[
+  node distance=1.2cm and 1.6cm,
+  proc/.style={draw, rounded corners, minimum width=3.6cm, minimum height=0.8cm, fill=yellow!15, align=center},
+  store/.style={draw, minimum width=2.4cm, minimum height=0.8cm, fill=cyan!10, align=center},
+  arr/.style={-Stealth, thick}
+]
+\node[proc] (p1) {P1: Authentication};
+\node[proc, below=of p1] (p2) {P2: Rating Management};
+\node[proc, below=of p2] (p3) {P3: Doubt Management};
+\node[proc, below=of p3] (p4) {P4: Performance Prediction};
+\node[proc, below=of p4] (p5) {P5: Admin Analytics \& Email};
+
+\node[store, right=2.8cm of p2] (d1) {Users};
+\node[store, right=2.8cm of p3] (d2) {Ratings};
+\node[store, right=2.8cm of p4] (d3) {Doubts};
+\node[store, right=2.8cm of p5] (d4) {Email Logs};
+
+\draw[arr] (p1) -- (d1);
+\draw[arr] (p2) -- (d2);
+\draw[arr] (p3) -- (d3);
+\draw[arr] (p5) -- (d4);
+\draw[arr] (p4) -- (d2);
+\end{tikzpicture}

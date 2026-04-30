@@ -1,0 +1,56 @@
+\section{Functional Requirements}
+\begin{enumerate}[leftmargin=1.5em]
+    \item User registration and login with credential validation.
+    \item Role support for student, professor, and admin users.
+    \item Professor directory with profile details and metadata.
+    \item Star-based rating with textual feedback submission.
+    \item Doubt posting by students with daily limit enforcement.
+    \item Doubt answer workflow for professors.
+    \item Student performance prediction module with history retention.
+    \item Trend chart visualization for prediction outcomes.
+    \item Admin dashboard with teacher performance indicators.
+    \item Individual and bulk email reporting from admin panel.
+\end{enumerate}
+
+\section{Non-Functional Requirements}
+\begin{enumerate}[label=\Alph*., leftmargin=1.5em]
+    \item \textbf{Security:} JWT-based session validation and bcrypt password hashing.
+    \item \textbf{Performance:} Fast dashboard rendering and efficient API response.
+    \item \textbf{Usability:} Clean navigation and role-specific interface.
+    \item \textbf{Reliability:} Persistent storage in MySQL.
+    \item \textbf{Scalability:} Modular backend APIs and frontend components.
+\end{enumerate}
+
+\section{User Roles}
+\begin{enumerate}[label=\Alph*., leftmargin=1.5em]
+    \item \textbf{Student:} Rate professors, post doubts, use prediction module.
+    \item \textbf{Professor:} View feedback and answer doubts.
+    \item \textbf{Admin:} View analytics and send performance reports.
+\end{enumerate}
+
+\section{Use Case Analysis}
+\subsection*{Use Case 1: Authentication}
+\textbf{Actors:} Student, Professor, Admin\\
+\textbf{Precondition:} User has registered credentials.\\
+\textbf{Main Flow:} The user submits login details, the system verifies credentials, and the user is redirected according to role.
+
+\subsection*{Use Case 2: Rating Submission}
+\textbf{Actor:} Student\\
+\textbf{Precondition:} Student is logged in.\\
+\textbf{Main Flow:} The student selects a professor, submits rating and feedback, and the system stores the record and updates aggregates.
+
+\subsection*{Use Case 3: Doubt Handling}
+\textbf{Actors:} Student, Professor\\
+\textbf{Precondition:} Both are authenticated.\\
+\textbf{Main Flow:} The student posts a doubt, the professor reviews and answers it, and the system updates the doubt status.
+
+\subsection*{Use Case 4: Performance Reporting}
+\textbf{Actor:} Admin\\
+\textbf{Precondition:} Admin is logged in.\\
+\textbf{Main Flow:} The admin reviews performance metrics and sends individual or bulk performance emails to professors.
+
+\section{Data Requirements}
+Core data entities include users, professors, ratings, doubts, sessions, and email logs. Relationships enforce traceability of who submitted feedback, who answered doubts, and which professor each performance metric belongs to.
+
+\section*{Chapter Summary}
+This chapter formalized the requirement baseline for EduRate across functional, non-functional, and role-specific expectations. It also documented representative use cases and data entities required for robust implementation and verification.

@@ -652,7 +652,10 @@ window.openProfDetail = function(profId) {
           +'<div style="color:#aaa;font-size:12px">'+f.text+'</div></div>';
       }).join("")+'</div>':'')
     +(currentUser.role==="student"
-      ?'<div style="display:flex;gap:10px"><button class="btn" onclick="openRateModal('+p.id+');document.getElementById(\'profDetailOverlay\').classList.remove(\'open\')">&#11088; Rate Professor</button></div>':"");
+      ?'<div style="display:flex;gap:10px;flex-wrap:wrap">'
+        +'<button class="btn" onclick="openRateModal('+p.id+');document.getElementById(\'profDetailOverlay\').classList.remove(\'open\')">&#11088; Rate Professor</button>'
+        +'<button class="btn" onclick="window.location.href=\'rating-trend.html?id='+p.id+'\'" style="background:rgba(96,165,250,0.15);color:#60a5fa;border:1px solid rgba(96,165,250,0.3)">📈 View Trend</button>'
+        +'</div>':"");
   $id("profDetailOverlay").classList.add("open");
 };
 
@@ -858,41 +861,318 @@ function buildPerfTab() {
     html += '</ul></div>';
   }
   
-  // Exam History
-  if (history && history.length) {
-    html += '<div style="background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:16px;padding:20px">'
-      + '<div style="font-size:14px;font-weight:600;color:#dde1f0;margin-bottom:12px">📚 Your Exam History</div>'
-      + '<table style="width:100%;border-collapse:collapse">'
-      + '<thead><tr style="border-bottom:2px solid rgba(255,255,255,0.1)">'
-      + '<th style="padding:10px;text-align:left;color:#888;font-size:12px;font-weight:600">Semester</th>'
-      + '<th style="padding:10px;text-align:center;color:#888;font-size:12px;font-weight:600">Marks</th>'
-      + '<th style="padding:10px;text-align:center;color:#888;font-size:12px;font-weight:600">Out of 10</th>'
-      + '</tr></thead><tbody>';
-    history.slice().reverse().forEach(function(h) {
-      var scoreColor = h.score >= 8 ? "#10b981" : h.score >= 7 ? "#3b82f6" : h.score >= 6 ? "#f59e0b" : "#f87171";
-      var marksDisplay = (h.marksObtained !== undefined && h.marksTotal !== undefined) 
-        ? h.marksObtained + "/" + h.marksTotal 
-        : h.score + "/10";
-      html += '<tr style="border-bottom:1px solid rgba(255,255,255,0.05)">'
-        + '<td style="padding:10px;color:#dde1f0;font-size:13px">' + h.semesterName + '</td>'
-        + '<td style="padding:10px;text-align:center;color:#888;font-size:13px">' + marksDisplay + '</td>'
-        + '<td style="padding:10px;text-align:center"><span style="background:rgba(' + 
-          (h.score >= 8 ? "16,185,129" : h.score >= 7 ? "59,130,246" : h.score >= 6 ? "245,158,11" : "248,113,113") + 
-          ',0.1);color:' + scoreColor + ';padding:4px 12px;border-radius:6px;font-weight:700;font-size:13px">' + h.score + '/10</span></td>'
-        + '</tr>';
-    });
-    html += '</tbody></table>'
-      + '<button class="btn-sm" style="margin-top:12px" onclick="addExamScoreModal()">+ Add New Exam Score</button>'
-      + '</div>';
-  } else {
-    html += '<div style="background:rgba(248,113,113,0.05);border:1px solid rgba(248,113,113,0.2);border-radius:16px;padding:20px;text-align:center">'
-      + '<div style="font-size:14px;color:#f87171;font-weight:600;margin-bottom:8px">📊 No exam data yet</div>'
-      + '<div style="font-size:12px;color:#888;margin-bottom:12px">Add your past exam scores to get predictions</div>'
-      + '<button class="btn-sm" onclick="addExamScoreModal()">+ Add Exam Score</button>'
-      + '</div>';
+  // Add Prediction Form Section
+  html += '<div style="background:rgba(168,85,247,0.05);border:1px solid rgba(168,85,247,0.2);border-radius:16px;padding:20px;margin-bottom:20px">'
+    + '<div style="font-size:14px;font-weight:600;color:#d8b4fe;margin-bottom:12px">📊 Add New Prediction</div>'
+    + '<div style="font-size:12px;color:#888;margin-bottom:12px">Fill out your exam details to get a personalized performance prediction based on your study patterns and historical data.</div>'
+    + '<button class="btn" onclick="openPerfForm()" style="background:rgba(168,85,247,0.3);border:1px solid rgba(168,85,247,0.5);color:#d8b4fe">+ Add Prediction</button>'
+    + '</div>';
+  
+  // Form Data History (if available)
+  if (typeof PerfFormSystem !== "undefined") {
+    var formEntries = PerfFormSystem.getAllEntries(currentUser.email);
+    if (formEntries && formEntries.length > 0) {
+      // Create organized charts by Semester > Subject
+      var semesterGroups = {};
+      formEntries.forEach(function(entry) {
+        if (!semesterGroups[entry.semester]) {
+          semesterGroups[entry.semester] = {};
+        }
+        if (!semesterGroups[entry.semester][entry.subject]) {
+          semesterGroups[entry.semester][entry.subject] = [];
+        }
+        semesterGroups[entry.semester][entry.subject].push(entry);
+      });
+      
+      // Render chart containers by semester
+      Object.keys(semesterGroups).sort().forEach(function(semester) {
+        html += '<div style="background:rgba(99,102,241,0.08);border:1px solid rgba(99,102,241,0.15);border-radius:12px;padding:16px;margin-bottom:24px">'
+          + '<div style="font-size:13px;font-weight:700;color:#818cf8;margin-bottom:16px;text-transform:uppercase;letter-spacing:0.05em">📚 ' + semester + '</div>';
+        
+        var subjects = semesterGroups[semester];
+        
+        // Render chart containers for each subject
+        Object.keys(subjects).sort().forEach(function(subject) {
+          var canvasId = "predictionChart_" + semester + "_" + subject.replace(/\s+/g, "_");
+          
+          html += '<div style="background:rgba(168,85,247,0.05);border:1px solid rgba(168,85,247,0.15);border-radius:10px;padding:14px;margin-bottom:12px">'
+            + '<div style="font-size:12px;font-weight:600;color:#d8b4fe;margin-bottom:10px">' + subject + '</div>'
+            + '<canvas id="' + canvasId + '" style="max-height:250px;"></canvas>'
+            + '</div>';
+        });
+        
+        html += '</div>';
+      });
+      
+      // Enhanced prediction history table with all fields
+      html += '<div style="background:rgba(59,130,246,0.05);border:1px solid rgba(59,130,246,0.2);border-radius:16px;padding:20px;margin-bottom:20px;overflow-x:auto">'
+        + '<div style="font-size:14px;font-weight:600;color:#60a5fa;margin-bottom:12px">📚 Your Prediction History (All Fields)</div>'
+        + '<table style="width:100%;border-collapse:collapse;font-size:11px;min-width:1000px">'
+        + '<thead><tr style="border-bottom:1px solid rgba(59,130,246,0.3);background:rgba(59,130,246,0.05)">'
+        + '<th style="padding:8px;text-align:left;color:#60a5fa;font-weight:600">Subject</th>'
+        + '<th style="padding:8px;text-align:center;color:#60a5fa;font-weight:600">Sem</th>'
+        + '<th style="padding:8px;text-align:center;color:#60a5fa;font-weight:600">Type of Exam</th>'
+        + '<th style="padding:8px;text-align:center;color:#60a5fa;font-weight:600">Notes</th>'
+        + '<th style="padding:8px;text-align:center;color:#60a5fa;font-weight:600">Study(hrs)</th>'
+        + '<th style="padding:8px;text-align:center;color:#60a5fa;font-weight:600">Last Day</th>'
+        + '<th style="padding:8px;text-align:center;color:#60a5fa;font-weight:600">Interest</th>'
+        + '<th style="padding:8px;text-align:center;color:#60a5fa;font-weight:600">Prev Marks</th>'
+        + '<th style="padding:8px;text-align:center;color:#60a5fa;font-weight:600">Assign %</th>'
+        + '<th style="padding:8px;text-align:center;color:#60a5fa;font-weight:600">Attend %</th>'
+        + '<th style="padding:8px;text-align:center;color:#60a5fa;font-weight:600">Next Time Expected (out of 10)</th>'
+        + '</tr></thead><tbody>';
+      
+      formEntries.slice().reverse().forEach(function(entry) {
+        var scoreColor = entry.predictedScore >= 8 ? "#10b981" : entry.predictedScore >= 7 ? "#3b82f6" : 
+                        entry.predictedScore >= 6 ? "#f59e0b" : "#f87171";
+        var prevMarksDisplay = entry.previousMarks + "/" + entry.totalMarks;
+        var notesDisplay = entry.notesMade ? "✓" : "✗";
+        var examTypeDisplay = entry.examType || "-";
+        
+        html += '<tr style="border-bottom:1px solid rgba(59,130,246,0.1)">'
+          + '<td style="padding:8px;color:#dde1f0;font-weight:500">' + (entry.subject || "-") + '</td>'
+          + '<td style="padding:8px;text-align:center;color:#888">' + (entry.semester || "-") + '</td>'
+          + '<td style="padding:8px;text-align:center;color:#888;font-weight:500">' + examTypeDisplay + '</td>'
+          + '<td style="padding:8px;text-align:center;color:#888">' + notesDisplay + '</td>'
+          + '<td style="padding:8px;text-align:center;color:#888">' + (entry.studyBefore || 0) + '</td>'
+          + '<td style="padding:8px;text-align:center;color:#888">' + (entry.studyLastDay || 0) + '</td>'
+          + '<td style="padding:8px;text-align:center;color:#888">' + (entry.interest || 0) + '/5</td>'
+          + '<td style="padding:8px;text-align:center;color:#888">' + prevMarksDisplay + '</td>'
+          + '<td style="padding:8px;text-align:center;color:#888">' + (entry.assignment || 0) + '%</td>'
+          + '<td style="padding:8px;text-align:center;color:#888">' + (entry.attendance || 0) + '%</td>'
+          + '<td style="padding:8px;text-align:center"><span style="background:rgba(' + (entry.predictedScore >= 8 ? "16,185,129" : entry.predictedScore >= 7 ? "59,130,246" : entry.predictedScore >= 6 ? "245,158,11" : "248,113,113") + ',0.15);color:' + scoreColor + ';padding:3px 8px;border-radius:4px;font-weight:600;font-size:10px">' + (entry.predictedScore || "N/A") + '/10</span></td>'
+          + '</tr>';
+      });
+      
+      html += '</tbody></table></div>';
+    } else {
+      // No form entries yet
+      html += '<div style="background:rgba(168,85,247,0.05);border:1px solid rgba(168,85,247,0.2);border-radius:16px;padding:20px;text-align:center">'
+        + '<div style="font-size:14px;color:#d8b4fe;font-weight:600;margin-bottom:8px">📊 Add Your First Prediction</div>'
+        + '<div style="font-size:12px;color:#888;margin-bottom:12px">Start adding exam predictions to see trends and insights</div>'
+        + '<button class="btn-sm" onclick="openPerfForm()">+ Add Prediction</button>'
+        + '</div>';
+    }
   }
   
   el.innerHTML = html;
+  
+  // Render chart if data available
+  if (typeof PerfFormSystem !== "undefined" && typeof Chart !== "undefined") {
+    var formEntries = PerfFormSystem.getAllEntries(currentUser.email);
+    if (formEntries && formEntries.length > 0) {
+      renderPredictionTrendChart(formEntries);
+    }
+  }
+}
+
+/* ════════════════════════════════════════════════════════════
+   CHART RENDERING - Prediction Trend Visualization
+   ════════════════════════════════════════════════════════════ */
+
+window.predictionCharts = {};
+
+// Define consistent exam type ordering
+const EXAM_TYPE_ORDER = {
+  "Assignment 1": 1,
+  "Assignment 2": 2,
+  "Assignment 3": 3,
+  "Quiz": 4,
+  "Practical": 5,
+  "Mid Semester": 6,
+  "Mid-Semester": 6,
+  "Midterm": 6,
+  "End Semester": 7,
+  "End-Semester": 7,
+  "Final": 7,
+  "Other": 99
+};
+
+function getExamTypeOrder(examType) {
+  return EXAM_TYPE_ORDER[examType] || 99;
+}
+
+function renderPredictionTrendChart(entries) {
+  if (!entries || entries.length === 0 || typeof Chart === "undefined") {
+    return;
+  }
+  
+  // Group entries by semester, then by subject, filtering by examType
+  var subjectCharts = {};
+  
+  entries.forEach(function(entry) {
+    if (!entry.semester || !entry.subject) return;
+    
+    // Create unique key for subject in semester
+    var key = entry.semester + "|||" + entry.subject;
+    
+    if (!subjectCharts[key]) {
+      subjectCharts[key] = {
+        semester: entry.semester,
+        subject: entry.subject,
+        dataPoints: []
+      };
+    }
+    
+    // Add data point with exam type
+    subjectCharts[key].dataPoints.push({
+      examType: entry.examType || "Other",
+      score: entry.predictedScore || 0,
+      timestamp: entry.timestamp
+    });
+  });
+  
+  // Destroy existing charts
+  Object.keys(window.predictionCharts).forEach(function(key) {
+    if (window.predictionCharts[key]) {
+      window.predictionCharts[key].destroy();
+    }
+  });
+  window.predictionCharts = {};
+  
+  // Create chart for each unique subject/semester combination
+  Object.keys(subjectCharts).forEach(function(key) {
+    var chartInfo = subjectCharts[key];
+    var semester = chartInfo.semester;
+    var subject = chartInfo.subject;
+    var dataPoints = chartInfo.dataPoints;
+    
+    if (!dataPoints || dataPoints.length === 0) return;
+    
+    // Sort data points by timestamp (chronological order of submission)
+    // This keeps all entries in the order they were added
+    dataPoints.sort(function(a, b) {
+      return new Date(a.timestamp) - new Date(b.timestamp);
+    });
+    
+    // Extract chart data and labels - keep ALL points in chronological order
+    var chartLabels = dataPoints.map(function(p) { return p.examType; });
+    var chartData = dataPoints.map(function(p) { return p.score; });
+    
+    console.log("📊 Processing subject '" + subject + "' with " + chartData.length + " data points: " + JSON.stringify(chartData));
+    
+    // Find or create canvas container
+    var canvasId = "predictionChart_" + semester + "_" + subject.replace(/\s+/g, "_");
+    var canvas = document.getElementById(canvasId);
+    
+    if (canvas) {
+      var ctx = canvas.getContext("2d");
+      var chartKey = semester + "_" + subject;
+      
+      // Determine color based on subject for visual distinction
+      var colors = ["#c084fc", "#60a5fa", "#34d399", "#fbbf24", "#f87171", "#818cf8"];
+      var colorIdx = Math.abs(subject.split('').reduce(function(a, b) { return a + b.charCodeAt(0); }, 0)) % colors.length;
+      var borderColor = colors[colorIdx];
+      
+      // Ensure at least 2 points for line rendering
+      var hasLineData = chartData.length >= 2;
+      
+      window.predictionCharts[chartKey] = new Chart(ctx, {
+        type: "line",
+        data: {
+          labels: chartLabels,
+          datasets: [{
+            label: subject + " (" + semester + ") - " + chartData.length + " entries",
+            data: chartData,
+            borderColor: borderColor,
+            backgroundColor: "transparent",
+            borderWidth: hasLineData ? 2 : 1,
+            fill: false,
+            tension: 0.3,
+            pointRadius: 6,
+            pointBackgroundColor: borderColor,
+            pointBorderColor: "#0d0d1a",
+            pointBorderWidth: 2,
+            pointHoverRadius: 8,
+            spanGaps: false,
+            segment: {
+              borderColor: borderColor,
+              borderDash: []
+            },
+            clip: false
+          }]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: true,
+          plugins: {
+            legend: {
+              display: true,
+              labels: {
+                color: "#dde1f0",
+                font: { size: 11, family: "'Syne', sans-serif" },
+                usePointStyle: true,
+                padding: 12
+              }
+            },
+            tooltip: {
+              backgroundColor: "rgba(0,0,0,0.8)",
+              titleColor: "#dde1f0",
+              bodyColor: "#dde1f0",
+              borderColor: borderColor,
+              borderWidth: 1,
+              padding: 8,
+              displayColors: true,
+              callbacks: {
+                title: function(context) {
+                  if (context.length > 0) {
+                    return context[0].label + " - " + subject;
+                  }
+                  return "";
+                },
+                label: function(context) {
+                  return "Predicted Score: " + (context.parsed.y !== null ? context.parsed.y.toFixed(1) : "N/A") + " / 10";
+                }
+              }
+            }
+          },
+          scales: {
+            y: {
+              beginAtZero: true,
+              max: 10,
+              min: 0,
+              ticks: {
+                color: "#888",
+                font: { size: 10 },
+                stepSize: 2
+              },
+              grid: {
+                color: "rgba(255,255,255,0.05)",
+                drawBorder: false
+              },
+              title: {
+                display: true,
+                text: "Predicted Score (out of 10)",
+                color: "#999",
+                font: { size: 11 }
+              }
+            },
+            x: {
+              ticks: {
+                color: "#888",
+                font: { size: 10 }
+              },
+              grid: {
+                color: "rgba(255,255,255,0.05)",
+                drawBorder: false
+              },
+              title: {
+                display: true,
+                text: "Type of Exam (Chronological Order)",
+                color: "#999",
+                font: { size: 11 }
+              }
+            }
+          }
+        },
+        animation: {
+          duration: 300
+        }
+      });
+      
+      console.log("✅ Chart created for: " + chartKey + " with " + chartData.length + " points");
+    }
+  });
 }
 
 window.addExamScoreModal = function() {
@@ -992,6 +1272,234 @@ function rebuildAll() {
   try { buildDoubtsTab(); } catch(e) { console.warn("buildDoubtsTab error:", e); }
   try { buildMyFeedback(); } catch(e) { console.warn("buildMyFeedback error:", e); }
   try { buildPerfTab(); } catch(e) { console.warn("buildPerfTab error:", e); }
+}
+
+/* ════════════════════════════════════════════════════════════
+   PERFORMANCE PREDICTION FORM (3-step integrated into dashboard)
+   ════════════════════════════════════════════════════════════ */
+
+let perfFormState = {
+  currentStep: 1,
+  semester: '',
+  subject: '',
+  assessmentType: 'Assignment1',
+  notesMade: true,
+  studyBefore: 0,
+  studyLastDay: 0,
+  interest: 3,
+  previousMarks: 0,
+  totalMarks: 100,
+  assignment: 50,
+  attendance: 70
+};
+
+function openPerfForm() {
+  // Reset form
+  perfFormState.currentStep = 1;
+  perfFormState.semester = '';
+  perfFormState.subject = '';
+  perfFormState.notesMade = true;
+  perfFormState.studyBefore = 0;
+  perfFormState.studyLastDay = 0;
+  perfFormState.interest = 3;
+  perfFormState.previousMarks = 0;
+  perfFormState.totalMarks = 100;
+  perfFormState.assignment = 50;
+  perfFormState.attendance = 70;
+  
+  // Reset form inputs
+  $id('perfFormSemester').value = '';
+  $id('perfFormSubject').value = '';
+  $id('perfFormAssessmentType').value = 'Assignment1';
+  $id('perfFormStudyBefore').value = '0';
+  $id('perfFormStudyLastDay').value = '0';
+  $id('perfFormInterest').value = '3';
+  updatePerfFormInterest();
+  $id('perfFormPrevMarks').value = '0';
+  $id('perfFormTotalMarks').value = '100';
+  $id('perfFormAssignment').value = '50';
+  updatePerfFormAssignment();
+  $id('perfFormAttendance').value = '70';
+  updatePerfFormAttendance();
+  
+  // Reset toggle buttons
+  document.querySelectorAll('#perfStep3 .toggle-btn').forEach((btn, idx) => {
+    if (idx === 0) btn.classList.add('active');
+    else btn.classList.remove('active');
+  });
+  
+  // Show form
+  $id('perfFormOverlay').classList.add('open');
+  showPerfFormStep(1);
+}
+
+function closePerfForm() {
+  $id('perfFormOverlay').classList.remove('open');
+  $id('perfFormError').style.display = 'none';
+}
+
+function showPerfFormStep(step) {
+  // Hide all steps
+  document.querySelectorAll('.perf-step').forEach(s => s.style.display = 'none');
+  $id('perfFormResult').style.display = 'none';
+  $id('perfFormButtonGroup').style.display = 'flex';
+  $id('perfFormRestartBtn').style.display = 'none';
+  
+  // Show current step
+  if (step === 1) {
+    $id('perfStep1').style.display = 'block';
+    $id('perfFormPrevBtn').style.display = 'none';
+    $id('perfFormNextBtn').textContent = 'Next →';
+  } else if (step === 2) {
+    $id('perfStep2').style.display = 'block';
+    $id('perfFormPrevBtn').style.display = 'block';
+    $id('perfFormNextBtn').textContent = 'Next →';
+  } else if (step === 3) {
+    $id('perfStep3').style.display = 'block';
+    $id('perfFormPrevBtn').style.display = 'block';
+    $id('perfFormNextBtn').textContent = 'Get Prediction →';
+  }
+  
+  // Update progress bar
+  const progress = (step / 3) * 100;
+  $id('perfFormProgress').style.width = progress + '%';
+  
+  perfFormState.currentStep = step;
+}
+
+function perfFormNextStep() {
+  // Validate current step
+  if (!validatePerfFormStep(perfFormState.currentStep)) {
+    return;
+  }
+  
+  if (perfFormState.currentStep < 3) {
+    showPerfFormStep(perfFormState.currentStep + 1);
+  } else {
+    // Submit and calculate prediction
+    calculatePerfPrediction();
+  }
+}
+
+function perfFormPreviousStep() {
+  if (perfFormState.currentStep > 1) {
+    showPerfFormStep(perfFormState.currentStep - 1);
+  }
+}
+
+function validatePerfFormStep(step) {
+  const errorDiv = $id('perfFormError');
+  errorDiv.style.display = 'none';
+  
+  if (step === 1) {
+    perfFormState.semester = $id('perfFormSemester').value;
+    if (!perfFormState.semester) {
+      errorDiv.textContent = '⚠️ Please select a semester';
+      errorDiv.style.display = 'block';
+      return false;
+    }
+  } else if (step === 2) {
+    perfFormState.subject = $id('perfFormSubject').value.trim();
+    if (!perfFormState.subject) {
+      errorDiv.textContent = '⚠️ Please enter a subject name';
+      errorDiv.style.display = 'block';
+      return false;
+    }
+    perfFormState.assessmentType = $id('perfFormAssessmentType').value;
+  } else if (step === 3) {
+    perfFormState.previousMarks = parseFloat($id('perfFormPrevMarks').value) || 0;
+    perfFormState.totalMarks = parseFloat($id('perfFormTotalMarks').value) || 1;
+    
+    if (perfFormState.totalMarks <= 0) {
+      errorDiv.textContent = '⚠️ Total marks must be greater than 0';
+      errorDiv.style.display = 'block';
+      return false;
+    }
+    
+    if (perfFormState.previousMarks < 0 || perfFormState.previousMarks > perfFormState.totalMarks) {
+      errorDiv.textContent = '⚠️ Obtained marks must be between 0 and ' + perfFormState.totalMarks;
+      errorDiv.style.display = 'block';
+      return false;
+    }
+  }
+  
+  return true;
+}
+
+function setPerfFormNotes(value) {
+  perfFormState.notesMade = value;
+  const buttons = document.querySelectorAll('#perfStep3 .toggle-btn');
+  buttons.forEach(b => b.classList.remove('active'));
+  event.target.classList.add('active');
+}
+
+function updatePerfFormInterest() {
+  const val = $id('perfFormInterest').value;
+  perfFormState.interest = parseInt(val);
+  $id('perfFormInterestVal').textContent = val + '/5';
+}
+
+function updatePerfFormAssignment() {
+  const val = $id('perfFormAssignment').value;
+  perfFormState.assignment = parseFloat(val);
+  $id('perfFormAssignmentVal').textContent = val + '%';
+}
+
+function updatePerfFormAttendance() {
+  const val = $id('perfFormAttendance').value;
+  perfFormState.attendance = parseFloat(val);
+  $id('perfFormAttendanceVal').textContent = val + '%';
+}
+
+function calculatePerfPrediction() {
+  if (!validatePerfFormStep(3)) {
+    return;
+  }
+  
+  // Update all form state from inputs
+  perfFormState.studyBefore = parseFloat($id('perfFormStudyBefore').value) || 0;
+  perfFormState.studyLastDay = parseFloat($id('perfFormStudyLastDay').value) || 0;
+  
+  // Get improved prediction using PerfFormSystem
+  const prediction = PerfFormSystem.getImprovedPrediction(currentUser.email, perfFormState);
+  
+  // Save to storage
+  PerfFormSystem.addFormEntry(currentUser.email, {
+    ...perfFormState,
+    predictedScore: prediction.finalScore
+  });
+  
+  // Display result
+  $id('perfFormResult').style.display = 'block';
+  $id('perfFormButtonGroup').style.display = 'none';
+  $id('perfFormRestartBtn').style.display = 'block';
+  
+  // Hide form steps
+  document.querySelectorAll('.perf-step').forEach(s => s.style.display = 'none');
+  
+  $id('perfFormResultScore').textContent = prediction.finalScore + ' / 10';
+  $id('perfFormResultCategory').textContent = prediction.category;
+  $id('perfFormResultAdvice').textContent = prediction.advice;
+  
+  // Show breakdown if available
+  let extra = '';
+  if (prediction.components.hasHistory) {
+    extra = 'Based on ' + prediction.regressionData.dataPoints + ' previous entries. ';
+    if (prediction.components.regressionScore !== null) {
+      extra += 'Weighted Score: ' + prediction.components.weightedScore + ', Regression: ' + prediction.components.regressionScore;
+    }
+  }
+  $id('perfFormResultExtra').textContent = extra;
+  
+  // Scroll to result
+  setTimeout(() => {
+    $id('perfFormResult').scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+  }, 100);
+  
+  // Rebuild performance tab after a delay
+  setTimeout(() => {
+    buildPerfTab();
+  }, 500);
 }
 
 rebuildAll();

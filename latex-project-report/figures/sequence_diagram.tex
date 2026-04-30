@@ -1,0 +1,16 @@
+\begin{tikzpicture}[
+  lifeline/.style={draw, minimum width=2.8cm, minimum height=0.9cm, fill=red!6, align=center},
+  arr/.style={-Stealth, thick}
+]
+\node[lifeline] (s) at (0,0) {Student};
+\node[lifeline] (f) at (4.8,0) {Frontend};
+\node[lifeline] (a) at (9.6,0) {API};
+\node[lifeline] (d) at (14.4,0) {Database};
+
+\draw[arr] (s.east) -- node[above]{Submit rating} (f.west);
+\draw[arr] (f.east) -- node[above]{API request} (a.west);
+\draw[arr] (a.east) -- node[above]{Store record} (d.west);
+\draw[arr] (d.west) to[bend left=12] node[below]{Write success} (a.east);
+\draw[arr] (a.west) to[bend left=12] node[below]{Return updated data} (f.east);
+\draw[arr] (f.west) to[bend left=12] node[below]{Show success} (s.east);
+\end{tikzpicture}

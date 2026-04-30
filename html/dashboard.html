@@ -140,6 +140,9 @@ function toggleSidebarDropdown() {
 }
 
   </script>
+
+  <!-- Chart.js for Prediction History Visualization -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@3.9.1/dist/chart.min.js"></script>
 </head>
 <body>
 
@@ -186,8 +189,8 @@ function toggleSidebarDropdown() {
       <a class="sidebar-link" onclick="sidebarGo('favorites')">
         <span class="s-icon">&#10084;&#65039;</span> Favorite Professor
       </a>
-      <a class="sidebar-link" id="perfTab" style="display:none" onclick="sidebarGo('perf')">
-        <span class="s-icon">&#128202;</span> My Performance
+      <a class="sidebar-link" id="perfTab" style="display:none" onclick="window.location.href='performance-predictor.html'">
+        <span class="s-icon">&#128202;</span> Performance Predictor
       </a>
       <a class="sidebar-link" onclick="sidebarLogout()">
         <span class="s-icon">&#128682;</span> Logout
@@ -371,6 +374,134 @@ function toggleSidebarDropdown() {
   </div>
 </div>
 
+<!-- PERFORMANCE PREDICTION FORM MODAL -->
+<div class="overlay" id="perfFormOverlay">
+  <div class="modal modal-wide">
+    <button class="close-btn" onclick="closePerfForm()" style="position:absolute;top:12px;right:12px;background:none;border:none;color:#888;cursor:pointer;font-size:24px;padding:0;width:32px;height:32px;display:flex;align-items:center;justify-content:center">×</button>
+    
+    <h3 style="margin-bottom:6px">📊 Performance Prediction</h3>
+    <p class="modal-sub">Add your exam details to get a personalized prediction</p>
+    
+    <!-- Error Message -->
+    <div id="perfFormError" style="display:none;background:rgba(248,113,113,0.15);border:1px solid rgba(248,113,113,0.3);color:#f87171;padding:10px 12px;border-radius:8px;font-size:12px;margin-bottom:16px"></div>
+    
+    <!-- Progress Bar -->
+    <div style="background:rgba(255,255,255,0.05);height:4px;border-radius:2px;margin-bottom:20px;overflow:hidden">
+      <div id="perfFormProgress" style="background:linear-gradient(to right,#3b82f6,#c084fc);height:100%;width:33%;transition:width 0.3s ease"></div>
+    </div>
+    
+    <!-- STEP 1: Semester -->
+    <div id="perfStep1" class="perf-step" style="display:block">
+      <div style="font-size:14px;color:#888;margin-bottom:12px;text-transform:uppercase;letter-spacing:0.05em">Step 1/3: Semester</div>
+      <div style="margin-bottom:16px">
+        <label style="display:block;font-size:12px;color:#888;margin-bottom:8px;text-transform:uppercase">SELECT SEMESTER</label>
+        <select id="perfFormSemester" style="width:100%;padding:10px 14px;background:rgba(255,255,255,0.055);border:1px solid rgba(255,255,255,0.09);border-radius:10px;color:#dde1f0;font-size:13px;font-family:'Syne',sans-serif;outline:none;cursor:pointer">
+          <option value="">-- Select Semester --</option>
+          <option value="Sem1">Semester 1</option>
+          <option value="Sem2">Semester 2</option>
+          <option value="Sem3">Semester 3</option>
+          <option value="Sem4">Semester 4</option>
+          <option value="Sem5">Semester 5</option>
+          <option value="Sem6">Semester 6</option>
+          <option value="Sem7">Semester 7</option>
+          <option value="Sem8">Semester 8</option>
+        </select>
+      </div>
+    </div>
+    
+    <!-- STEP 2: Subject + Assessment Type -->
+    <div id="perfStep2" class="perf-step" style="display:none">
+      <div style="font-size:14px;color:#888;margin-bottom:12px;text-transform:uppercase;letter-spacing:0.05em">Step 2/3: Subject & Assessment</div>
+      <div style="margin-bottom:16px">
+        <label style="display:block;font-size:12px;color:#888;margin-bottom:8px;text-transform:uppercase">SUBJECT NAME</label>
+        <input id="perfFormSubject" type="text" placeholder="e.g., Mathematics, Physics..." style="width:100%;padding:10px 14px;background:rgba(255,255,255,0.055);border:1px solid rgba(255,255,255,0.09);border-radius:10px;color:#dde1f0;font-size:13px;font-family:'Syne',sans-serif;outline:none;box-sizing:border-box" />
+      </div>
+      <div style="margin-bottom:16px">
+        <label style="display:block;font-size:12px;color:#888;margin-bottom:8px;text-transform:uppercase">Type of Exam</label>
+        <select id="perfFormAssessmentType" style="width:100%;padding:10px 14px;background:rgba(255,255,255,0.055);border:1px solid rgba(255,255,255,0.09);border-radius:10px;color:#dde1f0;font-size:13px;font-family:'Syne',sans-serif;outline:none;cursor:pointer">
+          <option value="Assignment1">Assignment 1</option>
+          <option value="Assignment2">Assignment 2</option>
+          <option value="Assignment3">Assignment 3</option>
+          <option value="EndExam">End Semester Exam</option>
+        </select>
+      </div>
+    </div>
+    
+    <!-- STEP 3: Exam Details -->
+    <div id="perfStep3" class="perf-step" style="display:none">
+      <div style="font-size:14px;color:#888;margin-bottom:16px;text-transform:uppercase;letter-spacing:0.05em">Step 3/3: Exam Details</div>
+      
+      <!-- Notes Made -->
+      <div style="margin-bottom:16px;padding:12px;background:rgba(99,102,241,0.05);border-radius:8px">
+        <label style="display:block;font-size:12px;color:#888;margin-bottom:10px;text-transform:uppercase">Did you make notes?</label>
+        <div style="display:flex;gap:8px">
+          <button type="button" class="toggle-btn active" onclick="setPerfFormNotes(true)" style="flex:1;padding:8px;background:rgba(59,130,246,0.3);border:1px solid rgba(59,130,246,0.5);color:#60a5fa;border-radius:6px;cursor:pointer;font-weight:600;font-size:12px">Yes</button>
+          <button type="button" class="toggle-btn" onclick="setPerfFormNotes(false)" style="flex:1;padding:8px;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);color:#888;border-radius:6px;cursor:pointer;font-weight:600;font-size:12px">No</button>
+        </div>
+      </div>
+      
+      <!-- Study Hours -->
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:16px">
+        <div>
+          <label style="display:block;font-size:12px;color:#888;margin-bottom:6px;text-transform:uppercase">Study Hours (before exam)</label>
+          <input id="perfFormStudyBefore" type="number" min="0" max="500" value="0" style="width:100%;padding:8px 10px;background:rgba(255,255,255,0.055);border:1px solid rgba(255,255,255,0.09);border-radius:8px;color:#dde1f0;font-size:12px;font-family:'Syne',sans-serif;outline:none;box-sizing:border-box" />
+        </div>
+        <div>
+          <label style="display:block;font-size:12px;color:#888;margin-bottom:6px;text-transform:uppercase">Study Hours (last day)</label>
+          <input id="perfFormStudyLastDay" type="number" min="0" max="24" value="0" style="width:100%;padding:8px 10px;background:rgba(255,255,255,0.055);border:1px solid rgba(255,255,255,0.09);border-radius:8px;color:#dde1f0;font-size:12px;font-family:'Syne',sans-serif;outline:none;box-sizing:border-box" />
+        </div>
+      </div>
+      
+      <!-- Interest Level -->
+      <div style="margin-bottom:16px">
+        <label style="display:block;font-size:12px;color:#888;margin-bottom:6px;text-transform:uppercase">Interest in Subject: <span id="perfFormInterestVal">3/5</span></label>
+        <input id="perfFormInterest" type="range" min="1" max="5" value="3" onchange="updatePerfFormInterest()" style="width:100%;cursor:pointer" />
+      </div>
+      
+      <!-- Previous Marks -->
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:16px">
+        <div>
+          <label style="display:block;font-size:12px;color:#888;margin-bottom:6px;text-transform:uppercase">Last Exam (obtained)</label>
+          <input id="perfFormPrevMarks" type="number" min="0" value="0" style="width:100%;padding:8px 10px;background:rgba(255,255,255,0.055);border:1px solid rgba(255,255,255,0.09);border-radius:8px;color:#dde1f0;font-size:12px;font-family:'Syne',sans-serif;outline:none;box-sizing:border-box" />
+        </div>
+        <div>
+          <label style="display:block;font-size:12px;color:#888;margin-bottom:6px;text-transform:uppercase">Last Exam (out of)</label>
+          <input id="perfFormTotalMarks" type="number" min="1" value="100" style="width:100%;padding:8px 10px;background:rgba(255,255,255,0.055);border:1px solid rgba(255,255,255,0.09);border-radius:8px;color:#dde1f0;font-size:12px;font-family:'Syne',sans-serif;outline:none;box-sizing:border-box" />
+        </div>
+      </div>
+      
+      <!-- Assignment Score -->
+      <div style="margin-bottom:16px">
+        <label style="display:block;font-size:12px;color:#888;margin-bottom:6px;text-transform:uppercase">Assignment Score: <span id="perfFormAssignmentVal">50%</span></label>
+        <input id="perfFormAssignment" type="range" min="0" max="100" value="50" onchange="updatePerfFormAssignment()" style="width:100%;cursor:pointer" />
+      </div>
+      
+      <!-- Attendance -->
+      <div style="margin-bottom:16px">
+        <label style="display:block;font-size:12px;color:#888;margin-bottom:6px;text-transform:uppercase">Attendance: <span id="perfFormAttendanceVal">70%</span></label>
+        <input id="perfFormAttendance" type="range" min="0" max="100" value="70" onchange="updatePerfFormAttendance()" style="width:100%;cursor:pointer" />
+      </div>
+    </div>
+    
+    <!-- Result Display -->
+    <div id="perfFormResult" style="display:none;background:rgba(99,102,241,0.05);border:1px solid rgba(99,102,241,0.2);border-radius:12px;padding:20px;text-align:center">
+      <div style="font-size:13px;color:#888;margin-bottom:12px;text-transform:uppercase;letter-spacing:0.05em">Expected Score</div>
+      <div style="font-size:48px;font-weight:900;color:#818cf8;margin-bottom:8px" id="perfFormResultScore">8.5</div>
+      <div style="font-size:14px;color:#dde1f0;margin-bottom:8px;font-weight:600" id="perfFormResultCategory">⭐ Great</div>
+      <div style="font-size:12px;color:#dde1f0;line-height:1.5" id="perfFormResultAdvice">You're well-prepared!</div>
+      <div style="font-size:11px;color:#555;margin-top:12px;padding-top:12px;border-top:1px solid rgba(99,102,241,0.1)" id="perfFormResultExtra"></div>
+    </div>
+    
+    <!-- Buttons -->
+    <div style="display:flex;gap:12px;margin-top:20px" id="perfFormButtonGroup">
+      <button class="btn btn-ghost" id="perfFormPrevBtn" onclick="perfFormPreviousStep()" style="display:none">← Back</button>
+      <button class="btn" id="perfFormNextBtn" onclick="perfFormNextStep()" style="flex:1">Next →</button>
+    </div>
+    
+    <button class="btn" id="perfFormRestartBtn" onclick="closePerfForm()" style="width:100%;margin-top:12px;display:none">Close</button>
+  </div>
+</div>
+
 <div class="toast" id="toast"></div>
 
 <!-- Scripts -->
@@ -381,6 +512,7 @@ function toggleSidebarDropdown() {
 <script src="../js/doubt-history.js"></script>
 <script src="../js/doubts.js"></script>
 <script src="../js/performance-predictor.js"></script>
+<script src="../js/perf-form-system.js"></script>
 <script src="../js/dashboard.js"></script>
 
 <script>

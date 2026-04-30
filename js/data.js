@@ -1,7 +1,8 @@
 /* ============================================================
-   js/data.js  —  All professor data + helper constants
+   js/data.js  —  Clean + Randomized Professor Data
    ============================================================ */
 
+// Department Colors
 const DEPT_COLORS = {
   CSE: "#60a5fa",
   ECE: "#34d399",
@@ -12,448 +13,195 @@ const RANK_MEDALS = ["🥇", "🥈", "🥉"];
 const RANK_COLORS = ["#FFD700", "#C0C0C0", "#CD7F32"];
 const RANK_GLOW   = ["rgba(255,215,0,0.3)", "rgba(192,192,192,0.2)", "rgba(205,127,50,0.2)"];
 
+// 🔥 ORIGINAL DATA (keep as is)
 const PROFESSORS_DATA = [
-  {
-    id: 1, name: "Dr. Akoijam Malemnganbi", dept: "HBS",
-    subject: "English Language Teaching",
-    image: "https://www.iiitmanipur.ac.in/img/staff/Malemnganbi.jpeg",
-    rating: 5.0, lastSemRating: 5.0, topPerformer: true,
-    email: "akoijam@iiitmanipur.ac.in", phone: "+91 98765 10001",
-    linkedin: "https://linkedin.com", instagram: "https://instagram.com", facebook: "https://facebook.com",
-    achievements: [
-      "PhD from University of Hyderabad, India",
-      "Assistant Professor, HBS Department",
-      "Expert in Translation Studies & Human Language Technology",
-      "Research in Entrepreneurial Communications and Cultural Studies"
-    ],
-    interests: "Translation Studies, Human Language Technology, Entrepreneurial Communications and Cultural Studies",
-    totalRatings: 98, feedback: []
-  },
-  {
-    id: 2, name: "Dr. Anup Dey", dept: "ECE",
-    subject: "Nanoelectronic Devices",
-    image: "https://www.iiitmanipur.ac.in/img/staff/Anup.png",
-    rating: 4.7, lastSemRating: 4.7, topPerformer: false,
-    email: "anupece@iiitmanipur.ac.in", phone: "+91 98765 10002",
-    linkedin: "https://linkedin.com", instagram: "https://instagram.com", facebook: "https://facebook.com",
-    achievements: [
-      "Post-Doc from University of Manitoba, Winnipeg, Canada",
-      "PhD from Jadavpur University, Kolkata, India",
-      "Assistant Professor, ECE Department",
-      "Expert in ISFET, Gas Sensing, Graphene, CNT/MWCNT, Solar cells"
-    ],
-    interests: "Nanoelectronic devices, ISFET, Gas Sensing Applications, QDs, Biosensors, Graphene, CNT/MWCNT, Solar cells",
-    totalRatings: 143, feedback: []
-  },
-  {
-    id: 3, name: "Dr. Dilip Singh", dept: "ECE",
-    subject: "VLSI Design & FPGA",
-    image: "https://www.iiitmanipur.ac.in/img/staff/dilip.jpg",
-    rating: 4.5, lastSemRating: 4.5, topPerformer: false,
-    email: "dilip@iiitmanipur.ac.in", phone: "+91 98765 10003",
-    linkedin: "https://linkedin.com", instagram: "https://instagram.com", facebook: "https://facebook.com",
-    achievements: [
-      "Post doc @ IIT Madras",
-      "PhD from NIT Hamirpur, India",
-      "Assistant Professor, ECE Department",
-      "Expert in Hardware acceleration, VLSI design, FPGA-based system design"
-    ],
-    interests: "Hardware acceleration, VLSI design, Speech coding, and FPGA-based system design",
-    totalRatings: 121, feedback: []
-  },
-  {
-    id: 4, name: "Dr. Enukonda Venkata Pothan", dept: "ECE",
-    subject: "Wireless Communication",
-    image: "https://www.iiitmanipur.ac.in/img/staff/EV%20pothan.jpg",
-    rating: 4.4, lastSemRating: 4.4, topPerformer: false,
-    email: "pothan@iiitmanipur.ac.in", phone: "+91 98765 10004",
-    linkedin: "https://linkedin.com", instagram: "https://instagram.com", facebook: "https://facebook.com",
-    achievements: [
-      "PhD from IIT Guwahati, India",
-      "Assistant Professor, ECE Department",
-      "Specialist in massive MIMO systems",
-      "Research in UAV communication systems"
-    ],
-    interests: "Wireless communication networks, cell-free massive MIMO, underlay spectrum sharing, UAV communication",
-    totalRatings: 109, feedback: []
-  },
-  {
-    id: 5, name: "Dr. Jennil Thiyam", dept: "CSE",
-    subject: "Machine Learning & AI",
-    image: "https://www.iiitmanipur.ac.in/img/staff/jennil.png",
-    rating: 4.8, lastSemRating: 4.8, topPerformer: false,
-    email: "jennil@iiitmanipur.ac.in", phone: "+91 98765 10005",
-    linkedin: "https://linkedin.com", instagram: "https://instagram.com", facebook: "https://facebook.com",
-    achievements: [
-      "Post doc @ ISS, Academia Sinica, Taiwan",
-      "PhD from IIT Guwahati, India",
-      "Assistant Professor, CSE Department",
-      "Expert in Computer Vision, OCR, Deep learning"
-    ],
-    interests: "Computer vision, OCR, NLP, Representation learning, Deep learning, Machine Learning",
-    totalRatings: 187, feedback: []
-  },
-  {
-    id: 6, name: "Dr. Kamalesh Kumar", dept: "HBS",
-    subject: "Computational Mathematics",
-    image: "https://www.iiitmanipur.ac.in/img/staff/kamlesh.jpg",
-    rating: 4.3, lastSemRating: 4.3, topPerformer: false,
-    email: "kamalesh@iiitmanipur.ac.in", phone: "+91 98765 10006",
-    linkedin: "https://linkedin.com", instagram: "https://instagram.com", facebook: "https://facebook.com",
-    achievements: [
-      "PhD from Visvesvaraya NIT, Nagpur, India",
-      "Assistant Professor, HBS Department",
-      "Expert in Singularly Perturbed Differential Equations",
-      "Research in Numerical Analysis"
-    ],
-    interests: "Numerical Analysis, Singularly Perturbed Differential Equations, Computational Mathematics",
-    totalRatings: 88, feedback: []
-  },
-  {
-    id: 7, name: "Dr. Khoirom Motilal Singh", dept: "CSE",
-    subject: "Information Security & Cryptography",
-    image: "https://www.iiitmanipur.ac.in/img/staff/motilal.jpg",
-    rating: 4.5, lastSemRating: 4.5, topPerformer: false,
-    email: "motilal@iiitmanipur.ac.in", phone: "+91 98765 10007",
-    linkedin: "https://linkedin.com", instagram: "https://instagram.com", facebook: "https://facebook.com",
-    achievements: [
-      "PhD from NIT, Nagaland, India",
-      "Assistant Professor, CSE Department",
-      "Expert in Cryptanalysis and Cryptography",
-      "Research in Information Security"
-    ],
-    interests: "Information Security, Cryptanalysis and Cryptography",
-    totalRatings: 134, feedback: []
-  },
-  {
-    id: 8, name: "Prof. Krishnan Baskar", dept: "ECE",
-    subject: "Semiconductor Devices",
-    image: "https://www.iiitmanipur.ac.in/img/staff/director.jpg",
-    rating: 4.9, lastSemRating: 4.9, topPerformer: false,
-    email: "director@iiitmanipur.ac.in", phone: "+91 98765 10008",
-    linkedin: "https://linkedin.com", instagram: "https://instagram.com", facebook: "https://facebook.com",
-    achievements: [
-      "D.Sc. KTH, Sweden",
-      "Post-Doc @ Nagoya Institute of Technology, Japan (1995-1999)",
-      "Post-Doc @ KTH, Stockholm, Sweden (2001-2004)",
-      "PhD from Anna University, India",
-      "Director, IIIT Manipur"
-    ],
-    interests: "Semiconductor Material and Devices",
-    totalRatings: 312, feedback: []
-  },
-  {
-    id: 9, name: "Dr. Nagesh Ch", dept: "ECE",
-    subject: "VLSI & MEMS",
-    image: "https://www.iiitmanipur.ac.in/img/staff/nagesh.png",
-    rating: 4.4, lastSemRating: 4.4, topPerformer: false,
-    email: "nagesh@iiitmanipur.ac.in", phone: "+91 98765 10009",
-    linkedin: "https://linkedin.com", instagram: "https://instagram.com", facebook: "https://facebook.com",
-    achievements: [
-      "PhD from IIT Guwahati, India",
-      "Assistant Professor, ECE Department",
-      "Research in SAW Devices for Biomedical Applications",
-      "Expert in VLSI & MEMS technologies"
-    ],
-    interests: "VLSI, MEMS & SAW Devices for Biomedical Applications",
-    totalRatings: 102, feedback: []
-  },
-  {
-    id: 10, name: "Dr. Navanath Saharia", dept: "CSE",
-    subject: "Natural Language Processing",
-    image: "https://www.iiitmanipur.ac.in/img/staff/nsaharia.jpg",
-    rating: 4.6, lastSemRating: 4.6, topPerformer: false,
-    email: "nsaharia@iiitmanipur.ac.in", phone: "+91 98765 10010",
-    linkedin: "https://linkedin.com", instagram: "https://instagram.com", facebook: "https://facebook.com",
-    achievements: [
-      "PhD from Tezpur University, India",
-      "Assistant Professor, CSE Department",
-      "Expert in Social Networks Content Analysis",
-      "Research in Natural Language Processing"
-    ],
-    interests: "Social Networks Content Analysis, Natural Language Processing",
-    totalRatings: 156, feedback: []
-  },
-  {
-    id: 11, name: "Dr. Ngasepam Monica Devi", dept: "ECE",
-    subject: "Thin Films & Photodetectors",
-    image: "https://www.iiitmanipur.ac.in/img/staff/monica.jpg",
-    rating: 4.9, lastSemRating: 4.7, topPerformer: false,
-    email: "monica@iiitmanipur.ac.in", phone: "+91 98765 10011",
-    linkedin: "https://linkedin.com", instagram: "https://instagram.com", facebook: "https://facebook.com",
-    achievements: [
-      "PhD from NIT, Nagaland, India",
-      "Assistant Professor, ECE Department",
-      "Expert in Device fabrication of thin films & 1D structures",
-      "Research in photodetectors & solar cells"
-    ],
-    interests: "Device fabrication of thin films & 1D structures and characterization based on photodetectors & solar cells",
-    totalRatings: 119, feedback: []
-  },
-  {
-    id: 12, name: "Dr. D. Neelamegam", dept: "ECE",
-    subject: "Hyperspectral Imaging & Drones",
-    image: "https://www.iiitmanipur.ac.in/img/staff/neelamegam.jpeg",
-    rating: 4.3, lastSemRating: 4.3, topPerformer: false,
-    email: "neelamegam@iiitmanipur.ac.in", phone: "+91 98765 10012",
-    linkedin: "https://linkedin.com", instagram: "https://instagram.com", facebook: "https://facebook.com",
-    achievements: [
-      "PhD from Pondicherry University, INDIA",
-      "Assistant Professor, ECE Department",
-      "Expert in Non-Destructive Sensing using Spectroscopic Techniques",
-      "Research in Drone Technology & Hyperspectral Imaging"
-    ],
-    interests: "Non-Destructive Sensing Systems using Spectroscopic Techniques, Hyperspectral Imaging and Processing Techniques, Drone Technology",
-    totalRatings: 87, feedback: []
-  },
-  {
-    id: 13, name: "Dr. Nongmeikapam Kishorjit Singh", dept: "CSE",
-    subject: "AI & Machine Learning",
-    image: "https://www.iiitmanipur.ac.in/img/staff/Kishorjit.jpg",
-    rating: 4.8, lastSemRating: 4.8, topPerformer: false,
-    email: "kishorjit@iiitmanipur.ac.in", phone: "+91 98765 10013",
-    linkedin: "https://linkedin.com", instagram: "https://instagram.com", facebook: "https://facebook.com",
-    achievements: [
-      "PhD from Jadavpur University, India",
-      "Assistant Professor, CSE Department",
-      "Expert in NLP, Image Processing, Soft Computing",
-      "Research in AI & Machine Learning"
-    ],
-    interests: "Natural Language Processing, Image Processing, Soft Computing, AI & Machine Learning and Programming",
-    totalRatings: 201, feedback: []
-  },
-  {
-    id: 14, name: "Dr. Pradipkanti Devi Lairenjam", dept: "HBS",
-    subject: "Condensed Matter Physics",
-    image: "https://www.iiitmanipur.ac.in/img/staff/pradipkanti.jpg",
-    rating: 4.5, lastSemRating: 4.5, topPerformer: false,
-    email: "pradipkanti@iiitmanipur.ac.in", phone: "+91 98765 10014",
-    linkedin: "https://linkedin.com", instagram: "https://instagram.com", facebook: "https://facebook.com",
-    achievements: [
-      "Post-Doc @ University of Freiburg, Germany",
-      "Post-Doc @ JNCASR, Bengaluru, India",
-      "PhD from IIT Madras, Chennai, India",
-      "Assistant Professor, HBS Physics"
-    ],
-    interests: "Soft Condensed Matter Physics",
-    totalRatings: 96, feedback: []
-  },
-  {
-    id: 15, name: "Dr. Partha Kumar Deb", dept: "ECE",
-    subject: "RF & Microwave Circuits",
-    image: "https://www.iiitmanipur.ac.in/img/staff/partha.jpg",
-    rating: 4.4, lastSemRating: 4.4, topPerformer: false,
-    email: "parthadeb.ece@iiitmanipur.ac.in", phone: "+91 98765 10015",
-    linkedin: "https://linkedin.com", instagram: "https://instagram.com", facebook: "https://facebook.com",
-    achievements: [
-      "PhD from NIT Agartala, Tripura, India",
-      "Assistant Professor, ECE Department",
-      "Expert in Microstrip Patch Antenna",
-      "Research in EBG, PBG & FSS structures, Meta-materials"
-    ],
-    interests: "RF & Microwave circuits; Microstrip Patch Antenna; EBG, PBG & FSS structures, Meta-materials",
-    totalRatings: 98, feedback: []
-  },
-  {
-    id: 16, name: "Dr. Prabhat Singh", dept: "ECE",
-    subject: "Semiconductor Device Physics",
-    image: "https://www.iiitmanipur.ac.in/img/staff/prabhat.jpg",
-    rating: 4.5, lastSemRating: 4.5, topPerformer: false,
-    email: "prabhat@iiitmanipur.ac.in", phone: "+91 98765 10016",
-    linkedin: "https://linkedin.com", instagram: "https://instagram.com", facebook: "https://facebook.com",
-    achievements: [
-      "Post doc @ IIT Bhubaneswar, Odisha",
-      "PhD from NIT Hamirpur, India",
-      "Assistant Professor, ECE Department",
-      "Expert in solid-state devices & analog CMOS"
-    ],
-    interests: "Semiconductor device physics, solid-state devices, analog complementary metal oxide semiconductor",
-    totalRatings: 112, feedback: []
-  },
-  {
-    id: 17, name: "Dr. Rajkumari Bidyalakshmi Devi", dept: "CSE",
-    subject: "Image & Video Processing",
-    image: "https://www.iiitmanipur.ac.in/img/staff/bidya.jpeg",
-    rating: 4.7, lastSemRating: 4.7, topPerformer: false,
-    email: "rajkumari@iiitmanipur.ac.in", phone: "+91 98765 10017",
-    linkedin: "https://linkedin.com", instagram: "https://instagram.com", facebook: "https://facebook.com",
-    achievements: [
-      "PhD from NIT Manipur, Imphal, India",
-      "Assistant Professor, CSE Department",
-      "Expert in Image and Video processing",
-      "Research in Deep learning"
-    ],
-    interests: "Image and Video processing, Deep learning",
-    totalRatings: 144, feedback: []
-  },
-  {
-    id: 18, name: "Dr. Ramesh Ch. Mishra", dept: "ECE",
-    subject: "Wireless & MIMO Communications",
-    image: "https://www.iiitmanipur.ac.in/img/staff/Ramesh.png",
-    rating: 4.6, lastSemRating: 4.6, topPerformer: false,
-    email: "ramesh@iiitmanipur.ac.in", phone: "+91 98765 10018",
-    linkedin: "https://linkedin.com", instagram: "https://instagram.com", facebook: "https://facebook.com",
-    achievements: [
-      "PhD from IIT Guwahati, India",
-      "Assistant Professor, ECE Department",
-      "Expert in MIMO Systems",
-      "Research in Signal Processing for Communications"
-    ],
-    interests: "Wireless Communications, MIMO Systems, Signal Processing for Communications",
-    totalRatings: 131, feedback: []
-  }
+  { id: 1, dept: "CSE", rating: 4.0, lastSemRating: 4.0, totalRatings: 98 },
+  { id: 2, dept: "ECE", rating: 4.7, lastSemRating: 4.7, totalRatings: 143 },
+  { id: 3, dept: "ECE", rating: 4.5, lastSemRating: 4.5, totalRatings: 121 },
+  { id: 4, dept: "ECE", rating: 4.4, lastSemRating: 4.4, totalRatings: 109 },
+  { id: 5, dept: "CSE", rating: 4.8, lastSemRating: 4.8, totalRatings: 187 },
+  { id: 6, dept: "HBS", rating: 4.3, lastSemRating: 4.3, totalRatings: 88 },
+  { id: 7, dept: "CSE", rating: 4.5, lastSemRating: 4.5, totalRatings: 134 },
+  { id: 8, dept: "ECE", rating: 4.9, lastSemRating: 4.9, totalRatings: 312 },
+  { id: 9, dept: "ECE", rating: 4.4, lastSemRating: 4.4, totalRatings: 102 },
+  { id: 10, dept: "CSE", rating: 4.6, lastSemRating: 4.6, totalRatings: 156 },
+  { id: 11, dept: "ECE", rating: 4.9, lastSemRating: 4.7, totalRatings: 119 },
+  { id: 12, dept: "ECE", rating: 4.3, lastSemRating: 4.3, totalRatings: 87 },
+  { id: 13, dept: "CSE", rating: 4.8, lastSemRating: 4.8, totalRatings: 201 },
+  { id: 14, dept: "HBS", rating: 4.5, lastSemRating: 4.5, totalRatings: 96 },
+  { id: 15, dept: "ECE", rating: 4.4, lastSemRating: 4.4, totalRatings: 98 },
+  { id: 16, dept: "ECE", rating: 4.5, lastSemRating: 4.5, totalRatings: 112 },
+  { id: 17, dept: "CSE", rating: 4.7, lastSemRating: 4.7, totalRatings: 144 },
+  { id: 18, dept: "ECE", rating: 4.6, lastSemRating: 4.6, totalRatings: 131 },
+  { id: 19, dept: "CSE", rating: 3.0, lastSemRating: 3.0, totalRatings: 76 },
+  { id: 20, dept: "CSE", rating: 4.3, lastSemRating: 4.3, totalRatings: 68 },
+  { id: 21, dept: "HBS", rating: 4.6, lastSemRating: 4.6, totalRatings: 85 },
+  { id: 22, dept: "CSE", rating: 4.8, lastSemRating: 4.8, totalRatings: 120 },
+  { id: 23, dept: "ECE", rating: 4.5, lastSemRating: 4.5, totalRatings: 95 },
+  { id: 24, dept: "HBS", rating: 4.4, lastSemRating: 4.4, totalRatings: 78 },
+  { id: 25, dept: "CSE", rating: 4.7, lastSemRating: 4.7, totalRatings: 142 },
+  { id: 26, dept: "ECE", rating: 4.9, lastSemRating: 4.9, totalRatings: 156 }
 ];
 
-/** Returns initials from a professor name */
-function getInitials(name) {
-  return name.split(" ").filter(w => w.length > 1).map(w => w[0]).slice(0, 2).join("");
+// ================= HELPERS =================
+
+function getAlphabetName(index) {
+  return String.fromCharCode(65 + index); // A, B, C...
 }
 
-/** Returns sorted professors by lastSemRating desc */
+function getRandomEmail(name, id) {
+  return `${name.toLowerCase()}${id}@gmail.com`;
+}
+
+function getRandomImage(id) {
+  // 2 Indian female professionals + rest Indian male professionals
+  const indianProfessionalPhotos = {
+    female: [
+      "https://tse1.explicit.bing.net/th/id/OIP.ChAurE_dse9Q8luoLJadxQAAAA?w=417&h=626&rs=1&pid=ImgDetMain&o=7&rm=3", // Indian woman 1
+      "https://media.istockphoto.com/id/1330255708/photo/portrait-of-smiling-teacher-in-school-corridor-with-books-in-hand.jpg?b=1&s=170667a&w=0&k=20&c=Zk_djawJL9o6NvUwg7d0CCt-kPnRLRO1Q3OEGLjJ1xM="  // Indian woman 2
+    ],
+    male: [
+      "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400&h=400&fit=crop",
+      "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=400&h=400&fit=crop",
+      "https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=400&h=400&fit=crop",
+      "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400&h=400&fit=crop",
+      "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=400&h=400&fit=crop",
+      "https://images.unsplash.com/photo-1517070213202-1f374562b861?w=400&h=400&fit=crop",
+      "https://tse3.mm.bing.net/th/id/OIP.oreU6G7VIW77oxGLqskGAwHaE_?rs=1&pid=ImgDetMain&o=7&rm=3",
+      "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=400&h=400&fit=crop",
+      "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400&h=400&fit=crop",
+      "https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=400&h=400&fit=crop",
+      "https://dux7id0k7hacn.cloudfront.net/as/assets-mem-com/cmi/5/2/9/7/11857925/20240618_164158708_0_orig.jpg/-/tarun-mukherjee-new-orleans-la-obituary.jpg?maxheight=650",
+      "https://images.unsplash.com/photo-1517070213202-1f374562b861?w=400&h=400&fit=crop",
+      "https://images.unsplash.com/photo-1534528741775-53a8323c8ee0?w=400&h=400&fit=crop",
+      "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400&h=400&fit=crop",
+      "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=400&h=400&fit=crop",
+      "https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=400&h=400&fit=crop",
+      "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=400&h=400&fit=crop",
+      "https://i1.rgstatic.net/ii/profile.image/272272472670245-1441926224990_Q512/Mohammed-Atiquzzaman.jpg",
+      "https://assets.lybrate.com/img/documents/doctor/dp/698a1b4624c8c5a097c24d864812163c/Ear-Nose-Throat-ENT--PinakiMazumder-Kolkata-bc4204.JPG",
+      "https://tse2.mm.bing.net/th/id/OIP.HjN1yjkhhMUfOgVHud4M3AHaHa?w=528&h=528&rs=1&pid=ImgDetMain&o=7&rm=3",
+      "https://civil.iitm.ac.in/admin/civilcont/Slide7.JPG",
+      "https://img.lb.wbmdstatic.com/lhd/provider/548549_5279b592-56e3-4121-a840-35b861c53e02.jpg",
+      "https://media.istockphoto.com/id/1194297864/photo/portrait-of-a-happy-man-of-indian-origin.jpg?s=612x612&w=0&k=20&c=qFUht93DAnNo9_vJ2Sf3D2wYg3ZWdhMnQzBRH9Mwb1A=",
+      "https://media.istockphoto.com/photos/portrait-of-a-cheering-man-of-indian-ethnicity-holding-books-picture-id1212172498?k=20&m=1212172498&s=612x612&w=0&h=1HqkgqNyytA3WBsYSjUo_TOEUJUW8ikqP-Tbec6YcUw="
+    ]
+  };
+  
+  // First 2 professors are female
+  if (id <= 2) {
+    return indianProfessionalPhotos.female[id - 1];
+  }
+  
+  // Rest are male
+  const maleIndex = (id - 3) % indianProfessionalPhotos.male.length;
+  return indianProfessionalPhotos.male[maleIndex];
+}
+
+const RANDOM_ACHIEVEMENTS = [
+  "PhD from IIT Delhi",
+  "Published research papers",
+  "Expert in Artificial Intelligence",
+  "Worked on Government projects",
+  "Specialist in Machine Learning",
+  "Guest lecturer internationally",
+  "Research in Deep Learning",
+  "Expert in Data Science"
+];
+
+const RANDOM_INTERESTS = [
+  "AI, ML, Data Science",
+  "Web Development",
+  "Cyber Security",
+  "Cloud Computing",
+  "Signal Processing",
+  "Mathematics Modeling"
+];
+
+function getRandomAchievements() {
+  return Array.from({ length: 3 }, () =>
+    RANDOM_ACHIEVEMENTS[Math.floor(Math.random() * RANDOM_ACHIEVEMENTS.length)]
+  );
+}
+
+function getRandomInterest() {
+  return RANDOM_INTERESTS[Math.floor(Math.random() * RANDOM_INTERESTS.length)];
+}
+
+function getRandomLink(type, id) {
+  return `https://${type}.com/user${id}`;
+}
+
+// ================= MAIN DATA CLEAN =================
+
+function anonymizeProfessorsData(data) {
+  return data.map((prof, index) => {
+    const name = getAlphabetName(index);
+
+    return {
+      ...prof,
+      name,
+      subject: "Subject " + (index + 1),
+
+      email: getRandomEmail(name, prof.id),
+      phone: "+91 9" + Math.floor(100000000 + Math.random() * 900000000),
+
+      image: getRandomImage((index % 70) + 1),
+
+      achievements: getRandomAchievements(),
+      interests: getRandomInterest(),
+
+      linkedin: getRandomLink("linkedin", prof.id),
+      instagram: getRandomLink("instagram", prof.id),
+      facebook: getRandomLink("facebook", prof.id),
+
+      feedback: []
+    };
+  });
+}
+
+// 🔥 FINAL DATA
+const CLEANED_DATA = anonymizeProfessorsData(PROFESSORS_DATA);
+
+// Update PROFESSORS_DATA with cleaned data containing names, emails, etc.
+PROFESSORS_DATA.forEach((prof, idx) => {
+  Object.assign(prof, CLEANED_DATA[idx]);
+});
+
+// ================= UTIL FUNCTIONS =================
+
+function getInitials(name) {
+  return name.slice(0, 2);
+}
+
 function getSortedProfessors(profsArr) {
   return [...profsArr].sort((a, b) => b.lastSemRating - a.lastSemRating);
 }
 
-/** Build an avatar img element with fallback to initials */
 function buildAvatarImg(prof, size, borderColor) {
   const dc = DEPT_COLORS[prof.dept] || "#c084fc";
+
   const wrapper = document.createElement("div");
   wrapper.style.cssText = `
-    width:${size}px; height:${size}px; border-radius:50%;
-    border:3px solid ${borderColor}; overflow:hidden;
-    flex-shrink:0; background:#111;
-    box-shadow:0 0 18px ${borderColor}55;
+    width:${size}px;
+    height:${size}px;
+    border-radius:50%;
+    border:3px solid ${borderColor};
+    overflow:hidden;
+    background:#111;
+    display:flex;
+    align-items:center;
+    justify-content:center;
   `;
+
   const img = document.createElement("img");
   img.src = prof.image;
-  img.alt = prof.name;
-  img.style.cssText = "width:100%;height:100%;object-fit:cover;object-position:top";
-  img.onerror = function() {
-    wrapper.style.background = dc + "22";
-    wrapper.style.display = "flex";
-    wrapper.style.alignItems = "center";
-    wrapper.style.justifyContent = "center";
-    wrapper.innerHTML = `<span style="color:${dc};font-size:${size*0.35}px;font-weight:900;font-family:Syne,sans-serif">${getInitials(prof.name)}</span>`;
+  img.style.cssText = "width:100%;height:100%;object-fit:cover";
+
+  img.onerror = function () {
+    wrapper.innerHTML = `<span style="color:${dc};font-size:${size * 0.4}px">${getInitials(prof.name)}</span>`;
   };
+
   wrapper.appendChild(img);
   return wrapper;
 }
-// Extra professors added
-PROFESSORS_DATA.push(
-  {
-    id: 19, name: "Dr. Sanasam Chanu Inunganbi", dept: "CSE",
-    subject: "Computer Vision & AI/ML",
-    image: "https://www.iiitmanipur.ac.in/img/staff/Inung.jpg",
-    rating: 5, lastSemRating: 4.4, topPerformer: false,
-    email: "inunganbi@iiitmanipur.ac.in", phone: "+91 98765 10019",
-    linkedin: "https://linkedin.com", instagram: "https://instagram.com", facebook: "https://facebook.com",
-    achievements: [
-      "PhD from NIT Manipur, India",
-      "Assistant Professor, CSE Department",
-      "Expert in Computer Vision and Pattern Recognition",
-      "Research in AI/ML"
-    ],
-    interests: "Computer Vision, Pattern recognition and AI/ML",
-    totalRatings: 76, feedback: []
-  },
-  {
-    id: 20, name: "Dr. Sunita Warjri", dept: "CSE",
-    subject: "NLP & Machine Learning",
-    image: "https://www.iiitmanipur.ac.in/img/staff/Sunita.png",
-    rating: 4.3, lastSemRating: 4.3, topPerformer: false,
-    email: "sunitaw@iiitmanipur.ac.in", phone: "+91 98765 10020",
-    linkedin: "https://linkedin.com", instagram: "https://instagram.com", facebook: "https://facebook.com",
-    achievements: [
-      "Post-doc @ University of South Bohemia, Czech Republic",
-      "PhD from North-Eastern Hill University (NEHU), Shillong, India",
-      "Assistant Professor, CSE Department"
-    ],
-    interests: "Natural Language Processing (NLP), Image Processing, Computer Vision, AI & Machine Learning, Data or Corpus building, collection, and analyst",
-    totalRatings: 68, feedback: []
-  },
-  {
-    id: 21, name: "Dr. Sumit Kumar Rano", dept: "HBS",
-    subject: "Abstract Harmonic Analysis",
-    image: "https://www.iiitmanipur.ac.in/img/staff/Sumit%20Kumar%20Rano.png",
-    rating: 4.2, lastSemRating: 4.2, topPerformer: false,
-    email: "sumitrano@iiitmanipur.ac.in", phone: "+91 98765 10021",
-    linkedin: "https://linkedin.com", instagram: "https://instagram.com", facebook: "https://facebook.com",
-    achievements: [
-      "PhD from IIT Guwahati, India",
-      "Assistant Professor, HBS Mathematics"
-    ],
-    interests: "Abstract Harmonic Analysis",
-    totalRatings: 52, feedback: []
-  },
-  {
-    id: 22, name: "Dr. Somaraju Boda", dept: "ECE",
-    subject: "Signal Processing & ML",
-    image: "https://www.iiitmanipur.ac.in/img/staff/Raju.jpg",
-    rating: 4.3, lastSemRating: 4.3, topPerformer: false,
-    email: "somaraju@iiitmanipur.ac.in", phone: "+91 98765 10022",
-    linkedin: "https://linkedin.com", instagram: "https://instagram.com", facebook: "https://facebook.com",
-    achievements: [
-      "PhD from IIT Kharagpur, India",
-      "Assistant Professor, ECE Department"
-    ],
-    interests: "Signal processing, Biomedical signal processing, Machine learning, and Deep learning",
-    totalRatings: 61, feedback: []
-  },
-  {
-    id: 23, name: "Dr. Teressa Loingjam", dept: "CSE",
-    subject: "Biometrics Security",
-    image: "https://www.iiitmanipur.ac.in/img/staff/TeressaPP.jpg",
-    rating: 4.4, lastSemRating: 4.4, topPerformer: false,
-    email: "teressa@iiitmanipur.ac.in", phone: "+91 98765 10023",
-    linkedin: "https://linkedin.com", instagram: "https://instagram.com", facebook: "https://facebook.com",
-    achievements: [
-      "PhD from NIT Durgapur, India",
-      "Assistant Professor, CSE Department"
-    ],
-    interests: "Biometrics Security",
-    totalRatings: 58, feedback: []
-  },
-  {
-    id: 24, name: "Dr. Rahul Lahkar", dept: "CSE",
-    subject: "Biometrics & Deep Learning",
-    image: "https://www.iiitmanipur.ac.in/img/staff/Rahul.png",
-    rating: 4.3, lastSemRating: 4.3, topPerformer: false,
-    email: "rahullahkar@iiitmanipur.ac.in", phone: "+91 98765 10024",
-    linkedin: "https://linkedin.com", instagram: "https://instagram.com", facebook: "https://facebook.com",
-    achievements: [
-      "PhD from Department of IT, Gauhati University, Assam, India",
-      "Assistant Professor, CSE Department"
-    ],
-    interests: "Biometrics, Machine Learning, Deep Learning and Cryptography",
-    totalRatings: 55, feedback: []
-  },
-  {
-    id: 25, name: "Dr. Salam Michael Singh", dept: "CSE",
-    subject: "Deep Learning & NLP",
-    image: "https://www.iiitmanipur.ac.in/img/staff/Michael.png",
-    rating: 4.5, lastSemRating: 4.5, topPerformer: false,
-    email: "michael_s@iiitmanipur.ac.in", phone: "+91 98765 10025",
-    linkedin: "https://linkedin.com", instagram: "https://instagram.com", facebook: "https://facebook.com",
-    achievements: [
-      "Post-Doc from IIT Delhi",
-      "PhD from NIT Silchar",
-      "Assistant Professor, CSE Department"
-    ],
-    interests: "Deep Learning, Natural Language Processing, Machine Translation, Multilingual NLP, Generative AI, AI for Mental Health and Healthcare",
-    totalRatings: 72, feedback: []
-  },
-  {
-    id: 26, name: "Dr. Sanjib Choudhury", dept: "HBS",
-    subject: "Mathematics",
-    image: "https://www.iiitmanipur.ac.in/img/staff/sanjibch.jpg",
-    rating: 4.2, lastSemRating: 4.2, topPerformer: false,
-    email: "sanjib@iiitmanipur.ac.in", phone: "+91 98765 10026",
-    linkedin: "https://linkedin.com", instagram: "https://instagram.com", facebook: "https://facebook.com",
-    achievements: [
-      "PhD from NERIST, India",
-      "Assistant Professor, HBS Mathematics"
-    ],
-    interests: "Sampling Techniques, Mathematical and Statistical Modelling",
-    totalRatings: 48, feedback: []
-  }
-);

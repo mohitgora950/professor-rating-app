@@ -1,0 +1,27 @@
+\begin{tikzpicture}[
+  node distance=1.3cm and 1.8cm,
+  proc/.style={draw, rounded corners, minimum width=4.0cm, minimum height=0.9cm, fill=orange!10, align=center},
+  store/.style={draw, minimum width=3.0cm, minimum height=0.9cm, fill=cyan!10, align=center},
+  ext/.style={draw, minimum width=2.8cm, minimum height=0.9cm, fill=green!10, align=center},
+  arr/.style={-Stealth, thick}
+]
+\node[ext] (student) {Student};
+\node[proc, below=of student] (validate) {P2.1 Validate Rating Input};
+\node[proc, below=of validate] (save) {P2.2 Store Rating and Feedback};
+\node[proc, below=of save] (aggregate) {P2.3 Update Professor Aggregates};
+\node[proc, below=of aggregate] (refresh) {P2.4 Return Updated Result};
+
+\node[store, right=3.8cm of save] (ratings) {D2: Ratings Table};
+\node[store, right=3.8cm of aggregate] (profs) {D3: Professors Table};
+
+\draw[arr] (student) -- (validate);
+\draw[arr] (validate) -- (save);
+\draw[arr] (save) -- (aggregate);
+\draw[arr] (aggregate) -- (refresh);
+\draw[arr] (refresh) -- (student);
+
+\draw[arr] (save.east) -- (ratings.west);
+\draw[arr] (aggregate.east) -- (profs.west);
+\draw[arr] (ratings.west) |- (aggregate.east);
+\draw[arr] (profs.west) |- (refresh.east);
+\end{tikzpicture}

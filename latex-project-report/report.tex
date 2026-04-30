@@ -1,0 +1,108 @@
+\documentclass[a4paper,12pt,oneside]{report}
+
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{geometry}
+\usepackage{setspace}
+\usepackage{graphicx}
+\usepackage{float}
+\usepackage{longtable}
+\usepackage{array}
+\usepackage{enumitem}
+\usepackage{xcolor}
+\usepackage{hyperref}
+\usepackage{tikz}
+\usetikzlibrary{arrows.meta,positioning,shapes.geometric}
+\usepackage{url}
+\usepackage[nottoc]{tocbibind}
+
+\geometry{margin=1in}
+\setstretch{1.2}
+
+\begin{document}
+
+% ===================== TITLE PAGE =====================
+\begin{titlepage}
+    \centering
+    \vspace*{1cm}
+
+    {\Large \textbf{EduRate: Professor Rating and Performance Analytics System}\par}
+    \vspace{0.6cm}
+    {\large Project Report\par}
+    \vspace{1.2cm}
+
+    A report submitted for the course named \textbf{Project-I (CSE3021)}\par
+
+    \vspace{1.5cm}
+    \includegraphics[width=4cm]{screenshots/iiit-manipur.png}
+    \vspace{1.2cm}
+
+    Submitted By\par
+    \vspace{0.3cm}
+    {\Large \textbf{MOHIT GORA}}\\
+    Roll No: \textbf{230101056}
+
+    \vspace{0.9cm}
+    Supervised By\par
+    \vspace{0.3cm}
+    {\Large \textbf{Dr. Sanasam Chanu Inunganbi}}
+
+    \vfill
+    {\large Department Of Computer Science And Engineering\\
+    Indian Institute of Information Technology Senapati, Manipur\\
+    Submission Date: \underline{\hspace{3cm}}}
+\end{titlepage}
+
+% ===================== DECLARATION =====================
+\chapter*{Declaration}
+In this submission, I have expressed my idea in my own words, and I have adequately cited and referenced any ideas or words that were taken from another source. I also declare that I adhere to all principles of academic honesty and integrity and that I have not misrepresented or falsified any ideas, data, facts, or sources in this submission. If any violation of the above is made, I understand that the institute may take disciplinary action. Such a violation may also engender disciplinary action from the sources which were not properly cited or permission not taken when needed.
+
+\vspace{1cm}\hspace{8.2cm} MOHIT GORA \\
+\vspace{0.5cm}\hspace{8.2cm} 230101056 \\
+\vspace{0.5cm} DATE: \underline{\hspace{3cm}}
+
+\newpage
+
+% ===================== ABSTRACT =====================
+\chapter*{Abstract}
+EduRate is a full-stack web application designed to improve transparency and quality in academic feedback systems. The platform offers separate interfaces for students, professors, and administrators. Students can rate professors, provide feedback, post doubts, and use a performance prediction feature. Professors can view feedback and respond to student doubts. Administrators can monitor faculty performance and send email-based performance reports.
+
+The system uses HTML, CSS, JavaScript, Node.js, Express.js, MySQL, JWT authentication, bcrypt hashing, and Chart.js for data visualization. The platform also includes role-based access control, trend analysis, and structured performance history. EduRate provides a practical model for digital, data-driven quality monitoring in educational institutions.
+
+\newpage
+
+% ===================== ACKNOWLEDGEMENT =====================
+\chapter*{Acknowledgement}
+I express my sincere gratitude to \textbf{Dr. Sanasam Chanu Inunganbi} for valuable guidance, encouragement, and support during this project. I am also thankful to the Department Of Computer Science And Engineering, Indian Institute of Information Technology Senapati, Manipur, for providing the opportunity and resources to complete this work.
+
+\tableofcontents
+\listoffigures
+\newpage
+
+\chapter{Introduction}
+\input{chapters/1_Introduction}
+
+\chapter{Literature Survey}
+\input{chapters/2_Literature_Survey}
+
+\chapter{Requirement Engineering}
+\input{chapters/3_Requirement}
+
+\chapter{System Design}
+\input{chapters/4_System_Design}
+
+\chapter{Implementation}
+\input{chapters/5_Implementation}
+
+\chapter{Results and Screenshots}
+\input{chapters/6_Results}
+
+\chapter{Conclusion and Future Scope}
+\input{chapters/7_Conclusion}
+
+% ===================== REFERENCES =====================
+\nocite{*}
+\bibliography{report}
+\bibliographystyle{unsrt}
+
+\end{document}

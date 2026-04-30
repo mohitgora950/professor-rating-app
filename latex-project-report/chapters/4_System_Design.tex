@@ -1,0 +1,105 @@
+\section{Introduction}
+This chapter presents the logical and structural design of EduRate. It describes how system components interact, how data flows across modules, and how core entities are organized in storage.
+
+\section{Architecture Overview}
+EduRate follows a client-server architecture with a web frontend, REST APIs, and a MySQL backend.
+
+\begin{figure}[H]
+\centering
+\input{figures/system_architecture}
+\caption{System Architecture Diagram}
+\end{figure}
+\noindent\textit{This diagram presents the high-level architecture of EduRate. It shows how users interact with the frontend, backend services, and database for core workflows.}
+
+\subsection*{Architecture Components}
+\begin{enumerate}[label=\Alph*., leftmargin=1.5em]
+    \item \textbf{Presentation Layer:} Browser-based UI for students, professors, and admins.
+    \item \textbf{Application Layer:} Express APIs for authentication, ratings, doubts, predictions, and admin actions.
+    \item \textbf{Data Layer:} MySQL schema with relational tables and analytical views.
+    \item \textbf{External Service Layer:} Email communication via Nodemailer.
+\end{enumerate}
+
+\section{DFD Level 0 (Context Diagram)}
+\begin{figure}[H]
+\centering
+\input{figures/dfd0}
+\caption{DFD Level 0}
+\end{figure}
+\noindent\textit{This context-level DFD highlights the external entities that interact with the system. It summarizes major data exchange between users and the EduRate platform.}
+
+\subsection*{DFD Level 0 Description}
+At the context level, EduRate exchanges requests and responses with three external entities (student, professor, and admin) while persisting and retrieving records from the database.
+
+\section{DFD Level 1}
+\begin{figure}[H]
+\centering
+\input{figures/dfd1}
+\caption{DFD Level 1}
+\end{figure}
+\noindent\textit{This diagram decomposes the main system into functional processes such as authentication, ratings, doubts, and reporting. It also indicates key data stores used by each process.}
+
+\subsection*{DFD Level 1 Description}
+The level-1 decomposition presents major internal processes for authentication, ratings, doubts, prediction, and administrative communication. Each process reads from or updates specific data stores.
+
+\section{DFD Level 2 (Rating and Feedback Process)}
+\begin{figure}[H]
+\centering
+\input{figures/dfd2}
+\caption{DFD Level 2}
+\end{figure}
+\noindent\textit{This level-2 DFD focuses specifically on the rating and feedback pipeline. It captures validation, persistence, aggregate update, and dashboard refresh flow.}
+
+\subsection*{DFD Level 2 Description}
+The level-2 model expands the rating process into validation, storage, aggregation update, and dashboard refresh steps. This captures internal logic after student rating submission.
+
+\section{User Journey Diagram}
+\begin{figure}[H]
+\centering
+\input{figures/user_journey_flow}
+\caption{End-to-End User Journey from Registration to Doubt Resolution}
+\end{figure}
+\noindent\textit{This flowchart explains the complete operational journey in the application. It begins with registration and login, then shows dashboard usage, rating submission, doubt posting, and professor-side doubt resolution.}
+
+\section{ER Diagram}
+\begin{figure}[H]
+\centering
+\input{figures/er_diagram}
+\caption{Entity Relationship Diagram}
+\end{figure}
+\noindent\textit{This ER diagram defines the structural relationships among core entities in the EduRate database. It clarifies how user, professor, rating, doubt, and session data are linked.}
+
+\subsection*{ER Design Notes}
+The schema ensures one-to-many mappings between users and ratings, professors and ratings, and users and sessions. Doubt records maintain linkage between student queries and professor responses.
+
+\section{Use Case Diagram}
+\begin{figure}[H]
+\centering
+\input{figures/use_case}
+\caption{Use Case Diagram}
+\end{figure}
+\noindent\textit{This use-case view maps responsibilities of students, professors, and administrators. It shows the primary operations available to each role in the application.}
+
+\section{Sequence Diagram (Rating Submission)}
+\begin{figure}[H]
+\centering
+\input{figures/sequence_diagram}
+\caption{Sequence Diagram for Rating Flow}
+\end{figure}
+\noindent\textit{This sequence diagram illustrates runtime interaction for rating submission. It shows request flow from student interface to backend and database, followed by response propagation.}
+
+\section{Database Design Summary}
+Main tables in the schema are:
+\begin{enumerate}[label=\Alph*., leftmargin=1.5em]
+    \item \texttt{users}
+    \item \texttt{professors}
+    \item \texttt{ratings}
+    \item \texttt{doubts}
+    \item \texttt{gifts}
+    \item \texttt{sessions}
+\end{enumerate}
+
+The design supports normalized storage, referential integrity, and efficient aggregation for analytics views such as top performers and average ratings.
+\noindent\textit{The table structure is designed so that each transaction can be traced from user action to persistent storage. This enables both operational reliability and analytics consistency.}
+
+\section*{Chapter Summary}
+This chapter presented the architectural and process-level design of EduRate using multiple formal diagrams. It covered DFD levels, ER modeling, sequence logic, and end-to-end user journey so that the complete data and control flow of the system remains clear and auditable.

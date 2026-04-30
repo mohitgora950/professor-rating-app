@@ -1,0 +1,22 @@
+\begin{tikzpicture}[
+  node distance=1.2cm and 1.5cm,
+  step/.style={draw, rounded corners, minimum width=4.8cm, minimum height=0.9cm, fill=blue!8, align=center},
+  branch/.style={draw, rounded corners, minimum width=4.8cm, minimum height=0.9cm, fill=teal!10, align=center},
+  prof/.style={draw, rounded corners, minimum width=4.8cm, minimum height=0.9cm, fill=orange!12, align=center},
+  arr/.style={-Stealth, thick}
+]
+\node[step] (reg) {Student Registration};
+\node[step, below=of reg] (login) {User Login};
+\node[step, below=of login] (dash) {Student Dashboard Opened};
+\node[branch, below left=1.6cm and 3.2cm of dash] (rate) {Open Professor Profile and Submit Rating};
+\node[branch, below right=1.6cm and 3.2cm of dash] (doubt) {Post Doubt Query for Professor};
+\node[prof, below=2.2cm of doubt] (pdash) {Professor Dashboard Receives Doubt};
+\node[prof, below=of pdash] (solve) {Professor Submits Solution/Answer};
+
+\draw[arr] (reg) -- (login);
+\draw[arr] (login) -- (dash);
+\draw[arr] (dash) -- (rate);
+\draw[arr] (dash) -- (doubt);
+\draw[arr] (doubt) -- (pdash);
+\draw[arr] (pdash) -- (solve);
+\end{tikzpicture}

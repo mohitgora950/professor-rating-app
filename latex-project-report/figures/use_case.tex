@@ -1,0 +1,24 @@
+\begin{tikzpicture}[
+  node distance=1.2cm and 1.8cm,
+  actor/.style={draw, minimum width=2.6cm, minimum height=0.8cm, fill=gray!10, align=center},
+  use/.style={draw, ellipse, minimum width=4.0cm, minimum height=0.9cm, fill=teal!10, align=center},
+  arr/.style={-Stealth, thick}
+]
+\node[actor] (student) {Student};
+\node[actor, below=of student] (prof) {Professor};
+\node[actor, below=of prof] (admin) {Admin};
+
+\node[use, right=3.2cm of student] (u1) {Register / Login};
+\node[use, below=of u1] (u2) {Rate Professor};
+\node[use, below=of u2] (u3) {Post Doubt};
+\node[use, below=of u3] (u4) {Use Performance Predictor};
+\node[use, below=of u4] (u5) {View Feedback / Answer Doubts};
+\node[use, below=of u5] (u6) {View Analytics / Send Emails};
+
+\draw[arr] (student) -- (u1);
+\draw[arr] (student) -- (u2);
+\draw[arr] (student) -- (u3);
+\draw[arr] (student) -- (u4);
+\draw[arr] (prof) -- (u5);
+\draw[arr] (admin) -- (u6);
+\end{tikzpicture}

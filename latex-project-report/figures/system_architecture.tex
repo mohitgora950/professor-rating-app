@@ -1,0 +1,17 @@
+\begin{tikzpicture}[
+  node distance=1.8cm and 1.8cm,
+  box/.style={draw, rounded corners, minimum width=3.2cm, minimum height=0.9cm, align=center, fill=blue!8},
+  arr/.style={-Stealth, thick}
+]
+\node[box] (users) {Users\\(Student/Professor/Admin)};
+\node[box, right=of users] (frontend) {Frontend\\HTML/CSS/JS};
+\node[box, right=of frontend] (api) {Backend API\\Node.js + Express};
+\node[box, below=of api] (db) {MySQL Database};
+\node[box, below=of frontend] (email) {Email Service\\Nodemailer};
+
+\draw[arr] (users) -- (frontend);
+\draw[arr] (frontend) -- (api);
+\draw[arr] (api) -- (db);
+\draw[arr] (api) -- (email);
+\draw[arr] (api) -- (frontend);
+\end{tikzpicture}

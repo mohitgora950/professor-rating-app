@@ -1,0 +1,21 @@
+\begin{tikzpicture}[
+  node distance=2.1cm and 2.8cm,
+  ext/.style={draw, minimum width=2.7cm, minimum height=0.9cm, fill=green!8, align=center},
+  proc/.style={draw, rounded corners, minimum width=4cm, minimum height=1.1cm, fill=orange!12, align=center},
+  arr/.style={-Stealth, thick}
+]
+\node[proc] (sys) {EduRate System};
+\node[ext, left=of sys] (student) {Student};
+\node[ext, above right=of sys] (prof) {Professor};
+\node[ext, below right=of sys] (admin) {Admin};
+\node[ext, below=of sys] (db) {MySQL DB};
+
+\draw[arr] (student) -- (sys);
+\draw[arr] (sys) -- (student);
+\draw[arr] (prof) -- (sys);
+\draw[arr] (sys) -- (prof);
+\draw[arr] (admin) -- (sys);
+\draw[arr] (sys) -- (admin);
+\draw[arr] (sys) -- (db);
+\draw[arr] (db) -- (sys);
+\end{tikzpicture}

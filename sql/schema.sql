@@ -99,25 +99,43 @@ CREATE TABLE IF NOT EXISTS sessions (
 --  SEED: Insert all 18 professors
 -- ─────────────────────────────────────────────
 INSERT INTO professors (name, dept, subject, email, phone, image_url, interests, achievements) VALUES
-('Dr. Akoijam Malemnganbi','HBS','English Language Teaching','akoijam@iiitmanipur.ac.in','+91 98765 10001','https://www.iiitmanipur.ac.in/img/staff/Malemnganbi.jpeg','Translation Studies, Human Language Technology, Entrepreneurial Communications','["PhD from University of Hyderabad, India","Assistant Professor HBS","Expert in Translation Studies & Human Language Technology"]'),
-('Dr. Anup Dey','ECE','Nanoelectronic Devices','anupece@iiitmanipur.ac.in','+91 98765 10002','https://api.dicebear.com/7.x/lorelei/svg?seed=AnupDey','Nanoelectronic devices, ISFET, Gas Sensing, QDs, Biosensors, Graphene, Solar cells','["Post-Doc University of Manitoba, Canada","PhD Jadavpur University","Assistant Professor ECE"]'),
-('Dr. Dilip Singh','ECE','VLSI Design & FPGA','dilip@iiitmanipur.ac.in','+91 98765 10003','https://api.dicebear.com/7.x/lorelei/svg?seed=DilipSingh','Hardware acceleration, VLSI design, Speech coding, FPGA-based system design','["Post doc IIT Madras","PhD NIT Hamirpur","Assistant Professor ECE"]'),
-('Dr. Enukonda Venkata Pothan','ECE','Wireless Communication','pothan@iiitmanipur.ac.in','+91 98765 10004','https://api.dicebear.com/7.x/lorelei/svg?seed=Pothan','Wireless networks, cell-free massive MIMO, spectrum sharing, UAV communication','["PhD IIT Guwahati","Assistant Professor ECE","Specialist in massive MIMO systems"]'),
-('Dr. Jennil Thiyam','CSE','Machine Learning & AI','jennil@iiitmanipur.ac.in','+91 98765 10005','https://api.dicebear.com/7.x/lorelei/svg?seed=JennilThiyam','Computer vision, OCR, NLP, Representation learning, Deep learning, ML','["Post doc ISS Academia Sinica Taiwan","PhD IIT Guwahati","Assistant Professor CSE"]'),
-('Dr. Kamalesh Kumar','HBS','Computational Mathematics','kamalesh@iiitmanipur.ac.in','+91 98765 10006','https://api.dicebear.com/7.x/lorelei/svg?seed=KamaleshKumar','Numerical Analysis, Singularly Perturbed Differential Equations, Computational Mathematics','["PhD Visvesvaraya NIT Nagpur","Assistant Professor HBS"]'),
-('Dr. Khoirom Motilal Singh','CSE','Information Security','motilal@iiitmanipur.ac.in','+91 98765 10007','https://api.dicebear.com/7.x/lorelei/svg?seed=MotilalSingh','Information Security, Cryptanalysis and Cryptography','["PhD NIT Nagaland","Assistant Professor CSE"]'),
-('Prof. Krishnan Baskar','ECE','Semiconductor Devices','director@iiitmanipur.ac.in','+91 98765 10008','https://api.dicebear.com/7.x/lorelei/svg?seed=KrishnanBaskar','Semiconductor Material and Devices','["D.Sc. KTH Sweden","Post-Doc Nagoya Institute Japan","Post-Doc KTH Stockholm","PhD Anna University","Director IIIT Manipur"]'),
-('Dr. Nagesh Ch','ECE','VLSI & MEMS','nagesh@iiitmanipur.ac.in','+91 98765 10009','https://api.dicebear.com/7.x/lorelei/svg?seed=NageshCh','VLSI, MEMS & SAW Devices for Biomedical Applications','["PhD IIT Guwahati","Assistant Professor ECE"]'),
-('Dr. Navanath Saharia','CSE','Natural Language Processing','nsaharia@iiitmanipur.ac.in','+91 98765 10010','https://api.dicebear.com/7.x/lorelei/svg?seed=NavanathSaharia','Social Networks Content Analysis, Natural Language Processing','["PhD Tezpur University","Assistant Professor CSE"]'),
-('Dr. Ngasepam Monica Devi','ECE','Thin Films & Photodetectors','monica@iiitmanipur.ac.in','+91 98765 10011','https://api.dicebear.com/7.x/lorelei/svg?seed=MonicaDevi','Device fabrication of thin films & 1D structures, photodetectors & solar cells','["PhD NIT Nagaland","Assistant Professor ECE"]'),
-('Dr. D. Neelamegam','ECE','Hyperspectral Imaging','neelamegam@iiitmanipur.ac.in','+91 98765 10012','https://api.dicebear.com/7.x/lorelei/svg?seed=Neelamegam','Non-Destructive Sensing, Hyperspectral Imaging, Drone Technology','["PhD Pondicherry University","Assistant Professor ECE"]'),
-('Dr. Nongmeikapam Kishorjit Singh','CSE','AI & Machine Learning','kishorjit@iiitmanipur.ac.in','+91 98765 10013','https://api.dicebear.com/7.x/lorelei/svg?seed=KishorjitSingh','NLP, Image Processing, Soft Computing, AI & Machine Learning','["PhD Jadavpur University","Assistant Professor CSE"]'),
-('Dr. Pradipkanti Devi Lairenjam','HBS','Condensed Matter Physics','pradipkanti@iiitmanipur.ac.in','+91 98765 10014','https://api.dicebear.com/7.x/lorelei/svg?seed=PradipkantiDevi','Soft Condensed Matter Physics','["Post-Doc Freiburg Germany","Post-Doc JNCASR Bengaluru","PhD IIT Madras","Assistant Professor HBS"]'),
-('Dr. Partha Kumar Deb','ECE','RF & Microwave Circuits','parthadeb.ece@iiitmanipur.ac.in','+91 98765 10015','https://api.dicebear.com/7.x/lorelei/svg?seed=ParthaDeb','RF & Microwave circuits, Microstrip Patch Antenna, EBG PBG FSS, Meta-materials','["PhD NIT Agartala","Assistant Professor ECE"]'),
-('Dr. Prabhat Singh','ECE','Semiconductor Device Physics','prabhat@iiitmanipur.ac.in','+91 98765 10016','https://api.dicebear.com/7.x/lorelei/svg?seed=PrabhatSingh','Semiconductor device physics, solid-state devices, analog CMOS','["Post doc IIT Bhubaneswar","PhD NIT Hamirpur","Assistant Professor ECE"]'),
-('Dr. Rajkumari Bidyalakshmi Devi','CSE','Image & Video Processing','rajkumari@iiitmanipur.ac.in','+91 98765 10017','https://api.dicebear.com/7.x/lorelei/svg?seed=RajkumariDevi','Image and Video processing, Deep learning','["PhD NIT Manipur","Assistant Professor CSE"]'),
-('Dr. Ramesh Ch. Mishra','ECE','Wireless & MIMO Communications','ramesh@iiitmanipur.ac.in','+91 98765 10018','https://api.dicebear.com/7.x/lorelei/svg?seed=RameshMishra','Wireless Communications, MIMO Systems, Signal Processing','["PhD IIT Guwahati","Assistant Professor ECE"]');
+('A','CSE','Subject 1','a1@gmail.com','+91 9000000001','', 'AI, ML, Data Science','["PhD IIT Delhi","Expert in AI","Published papers"]'),
 
+('B','ECE','Subject 2','b2@gmail.com','+91 9000000002','', 'Signal Processing, Embedded Systems','["PhD IIT Bombay","Research in VLSI","Assistant Professor"]'),
+
+('C','ECE','Subject 3','c3@gmail.com','+91 9000000003','', 'VLSI, FPGA','["PhD NIT","Hardware expert","Published journals"]'),
+
+('D','ECE','Subject 4','d4@gmail.com','+91 9000000004','', 'Wireless Communication','["PhD IIT Guwahati","MIMO specialist","Research projects"]'),
+
+('E','CSE','Subject 5','e5@gmail.com','+91 9000000005','', 'Machine Learning, NLP','["PhD IIT Madras","Deep Learning expert","AI Research"]'),
+
+('F','HBS','Subject 6','f6@gmail.com','+91 9000000006','', 'Mathematics, Modeling','["PhD NIT","Math expert","Teaching excellence"]'),
+
+('G','CSE','Subject 7','g7@gmail.com','+91 9000000007','', 'Cyber Security','["PhD IIIT","Security expert","Cryptography research"]'),
+
+('H','ECE','Subject 8','h8@gmail.com','+91 9000000008','', 'Semiconductors','["PhD Abroad","Device expert","Director level"]'),
+
+('I','ECE','Subject 9','i9@gmail.com','+91 9000000009','', 'MEMS, VLSI','["PhD IIT","MEMS research","Professor"]'),
+
+('J','CSE','Subject 10','j10@gmail.com','+91 9000000010','', 'NLP','["PhD University","NLP expert","Social data research"]'),
+
+('K','ECE','Subject 11','k11@gmail.com','+91 9000000011','', 'Photodetectors','["PhD NIT","Solar research","Thin films"]'),
+
+('L','ECE','Subject 12','l12@gmail.com','+91 9000000012','', 'Drone Tech','["PhD University","Imaging expert","Drone research"]'),
+
+('M','CSE','Subject 13','m13@gmail.com','+91 9000000013','', 'AI, ML','["PhD Jadavpur","AI expert","Soft computing"]'),
+
+('N','HBS','Subject 14','n14@gmail.com','+91 9000000014','', 'Physics','["PhD IIT","Condensed matter","Research scholar"]'),
+
+('O','ECE','Subject 15','o15@gmail.com','+91 9000000015','', 'RF Circuits','["PhD NIT","Antenna expert","Meta-materials"]'),
+
+('P','ECE','Subject 16','p16@gmail.com','+91 9000000016','', 'Semiconductor Physics','["PhD IIT","CMOS expert","Device physics"]'),
+
+('Q','CSE','Subject 17','q17@gmail.com','+91 9000000017','', 'Image Processing','["PhD NIT","Video processing","Deep learning"]'),
+
+('R','ECE','Subject 18','r18@gmail.com','+91 9000000018','', 'Wireless Communication','["PhD IIT","MIMO expert","Signal processing"]'),
+
+('S','CSE','Subject 19','s19@gmail.com','+91 9000000019','', 'Deep Learning','["PhD IIT","Generative AI","NLP expert"]');
 -- ─────────────────────────────────────────────
 --  USEFUL VIEWS
 -- ─────────────────────────────────────────────
