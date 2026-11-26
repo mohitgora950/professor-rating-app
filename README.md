@@ -1,3 +1,42 @@
+<!-- mg-header -->
+<p align="center">
+  <img src=".github/banner.svg" alt="professor-rating-app banner" width="100%" />
+</p>
+
+<p align="center">
+  <img src="https://img.shields.io/badge/Node.js-339933?style=for-the-badge&logo=nodedotjs&logoColor=white" alt="Node.js" />
+  <img src="https://img.shields.io/badge/Express-000000?style=for-the-badge&logo=express&logoColor=white" alt="Express" />
+  <img src="https://img.shields.io/badge/MySQL-4479A1?style=for-the-badge&logo=mysql&logoColor=white" alt="MySQL" />
+  <img src="https://img.shields.io/badge/JWT-000000?style=for-the-badge&logo=jsonwebtokens&logoColor=white" alt="JWT" />
+  <img src="https://img.shields.io/badge/Chart.js-FF6384?style=for-the-badge&logo=chartdotjs&logoColor=white" alt="Chart.js" />
+  <img src="https://img.shields.io/badge/Nodemailer-22B573?style=for-the-badge&logo=minutemailer&logoColor=white" alt="Nodemailer" />
+</p>
+
+<p align="center">
+  <a href="https://mohitgora950.github.io"><b>🌐 Portfolio</b></a> · <a href="https://github.com/mohitgora950"><b>👤 More projects</b></a> · <a href="https://www.linkedin.com/in/mohit-goraaaa1234/"><b>💼 LinkedIn</b></a> · <a href="mailto:mohitgora950@gmail.com"><b>📫 Hire me</b></a>
+</p>
+
+> **TL;DR:** A full-stack platform for IIIT Manipur with **three roles (Student, Professor, Admin)**. Students rate professors and raise doubts, professors see their feedback, and admins get an **analytics dashboard with a performance predictor** and **automated email reports**.
+
+### ✨ Highlights
+
+- 🔐 Secure auth with **JWT + bcryptjs** and role-based access control
+- 📈 **Performance predictor** combining a weighted scoring formula with regression
+- 📊 Admin analytics with **Chart.js** and automated email reports via **Nodemailer**
+- 💬 Doubt system with rate limits (max 2 per day) and an abusive-language filter
+- 🗄️ Normalised **MySQL** schema with SQL views for reporting
+
+### 📸 Screenshots
+
+<table>
+<tr><td align="center" width="50%"><img src="Edurate_screenshots/login.png" alt="Login" width="100%" /><br /><sub><b>Login</b></sub></td><td align="center" width="50%"><img src="Edurate_screenshots/dashboard_student.png" alt="Student dashboard" width="100%" /><br /><sub><b>Student dashboard</b></sub></td></tr>
+<tr><td align="center" width="50%"><img src="Edurate_screenshots/Admin-Dashboard.png" alt="Admin analytics" width="100%" /><br /><sub><b>Admin analytics</b></sub></td><td align="center" width="50%"><img src="Edurate_screenshots/performance_prediction.png" alt="Performance prediction" width="100%" /><br /><sub><b>Performance prediction</b></sub></td></tr>
+<tr><td align="center" width="50%"><img src="Edurate_screenshots/Doubt.png" alt="Doubt system" width="100%" /><br /><sub><b>Doubt system</b></sub></td><td align="center" width="50%"><img src="Edurate_screenshots/after_prediction.png" alt="Prediction result" width="100%" /><br /><sub><b>Prediction result</b></sub></td></tr>
+</table>
+
+---
+<!-- /mg-header -->
+
 # 🎓 EduRate — Professor Rating App
 ### IIIT Manipur | Complete Project with Admin Features
 
